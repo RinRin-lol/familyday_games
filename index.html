@@ -12,15 +12,13 @@
       <a class="brand" href="#top" aria-label="トップへ戻る">
         <span class="brand-icon">✨</span>
         <span>
-          <strong>プロンプトメーカー</strong>
-          <small>Game Prompt Builder</small>
+          <strong>FamilyDayゲームツクール特設サイト</strong>
+          <small>Let's make games!</small>
         </span>
       </a>
       <nav class="top-nav" aria-label="メニュー">
-        <a href="arcade/index.html">あそぶ</a>
-        <a href="#make">つくる</a>
-        <a href="#improve">改良する</a>
-        <a href="#fix">こまった時</a>        
+        <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">AIでゲームを作る</a>
+        <a href="arcade/index.html">作ったゲームであそぶ</a>
       </nav>
     </div>
   </header>
@@ -28,16 +26,11 @@
   <main id="top">
     <section class="hero">
       <div class="hero-copy">
-        <p class="kicker">Google AI Studio に貼るだけ</p>
+        <p class="kicker">プロンプトメーカー</p>
         <h1>ゲームのアイデアを、<br />AIに伝わるプロンプトへ。</h1>
         <p class="lead">
           質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。
-          小学生でも迷わないように、選択式を多めにした講座用の試作サイトです。
         </p>
-        <div class="hero-actions">
-          <a class="btn primary" href="#make">新しいゲームを作る</a>
-          <button class="btn ghost" id="fillSample">お手本を入れる</button>
-        </div>
       </div>
       <div class="hero-card" aria-hidden="true">
         <div class="floating-card card-a">主人公：宇宙ねこ</div>
@@ -54,7 +47,6 @@
       <button class="mode active" data-mode="make">🎮 新しく作る</button>
       <button class="mode" data-mode="improve">🛠️ 改良する</button>
       <button class="mode" data-mode="fix">🧯 エラー相談</button>
-      <button class="mode" data-mode="present">🎤 発表文</button>
     </section>
 
     <section class="workspace">
@@ -175,24 +167,10 @@
           </label>
         </div>
 
-        <div class="form-grid hidden" id="present" data-section="present">
-          <label>
-            ゲーム名
-            <input id="presentationTitle" placeholder="例：宇宙ねこラン" />
-          </label>
-          <label>
-            いちばん見てほしいところ
-            <input id="appealPoint" placeholder="例：敵をよけるタイミング、かわいい背景" />
-          </label>
-          <label class="wide">
-            作るときに工夫したこと
-            <textarea id="effort" rows="4" placeholder="例：iPadでも遊びやすいようにボタンを大きくしました"></textarea>
-          </label>
-        </div>
-
         <div class="form-actions">
           <button type="button" class="btn primary" id="generate">プロンプトを作る</button>
           <button type="reset" class="btn ghost">入力をリセット</button>
+          <button type="button" class="btn ghost" id="fillSample">お手本を入れる</button>
         </div>
       </form>
 

@@ -27,10 +27,6 @@ const modeTexts = {
     title: 'こまっていることを教えてください',
     help: 'エラーや動かない原因をAIに相談するための文章を作ります。',
   },
-  present: {
-    title: '発表用の紹介文を作りましょう',
-    help: '最後にみんなへゲームを紹介するときの短い発表文を作ります。',
-  },
 };
 
 function value(id, fallback = '') {
@@ -59,7 +55,6 @@ function generatePrompt() {
     make: makeGamePrompt,
     improve: makeImprovePrompt,
     fix: makeFixPrompt,
-    present: makePresentationPrompt,
   };
 
   el.output.value = generators[state.mode]();
@@ -143,30 +138,6 @@ function makeFixPrompt() {
 ・修正した場所が分かるように、短いコメントを入れてください。
 
 このあと、現在のコードを貼ります。`;
-}
-
-function makePresentationPrompt() {
-  const title = value('presentationTitle', '自分のゲーム');
-  const appealPoint = value('appealPoint', '見てほしいところ');
-  const effort = value('effort', '工夫したところ');
-
-  return `次のゲームを発表するときの、短くて分かりやすい紹介文を作ってください。
-小中高生が話しやすい、やさしい言葉にしてください。
-
-【ゲーム名】
-${title}
-
-【いちばん見てほしいところ】
-${appealPoint}
-
-【作るときに工夫したこと】
-${effort}
-
-【条件】
-・30秒くらいで話せる長さにしてください。
-・最初にゲームの内容を説明してください。
-・最後に「ぜひ遊んでみてください」のような一言を入れてください。
-・堅すぎない、自然な話し言葉にしてください。`;
 }
 
 function fillSample() {
