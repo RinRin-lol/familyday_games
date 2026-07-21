@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ゲームづくりプロンプトメーカー</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="#top" aria-label="トップへ戻る">
+        <span class="brand-icon">✨</span>
+        <span>
+          <strong>プロンプトメーカー</strong>
+          <small>Game Prompt Builder</small>
+        </span>
+      </a>
+      <nav class="top-nav" aria-label="メニュー">
+        <a href="#make">つくる</a>
+        <a href="#improve">改良する</a>
+        <a href="#fix">こまった時</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="kicker">Google AI Studio に貼るだけ</p>
+        <h1>ゲームのアイデアを、<br />AIに伝わるプロンプトへ。</h1>
+        <p class="lead">
+          質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。
+          小学生でも迷わないように、選択式を多めにした講座用の試作サイトです。
+        </p>
+        <div class="hero-actions">
+          <a class="btn primary" href="#make">新しいゲームを作る</a>
+          <button class="btn ghost" id="fillSample">お手本を入れる</button>
+        </div>
+      </div>
+      <div class="hero-card" aria-hidden="true">
+        <div class="floating-card card-a">主人公：宇宙ねこ</div>
+        <div class="floating-card card-b">操作：タップでジャンプ</div>
+        <div class="floating-card card-c">世界観：お菓子の国</div>
+        <div class="prompt-preview">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <p>HTML、CSS、JavaScriptを使って、iPadで遊べるゲームを作ってください...</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="mode-tabs" aria-label="モード選択">
+      <button class="mode active" data-mode="make">🎮 新しく作る</button>
+      <button class="mode" data-mode="improve">🛠️ 改良する</button>
+      <button class="mode" data-mode="fix">🧯 エラー相談</button>
+      <button class="mode" data-mode="present">🎤 発表文</button>
+    </section>
+
+    <section class="workspace">
+      <form class="panel form-panel" id="promptForm">
+        <div class="panel-head">
+          <p class="label">STEP 1</p>
+          <h2 id="formTitle">作りたいゲームを教えてください</h2>
+          <p id="formHelp">まずは選ぶだけでOK。自由入力は分かるところだけで大丈夫です。</p>
+        </div>
+
+        <div class="form-grid" id="make" data-section="make">
+          <label>
+            ゲームの種類
+            <select id="genre">
+              <option>ジャンプゲーム</option>
+              <option>避けゲー</option>
+              <option>シューティング</option>
+              <option>迷路ゲーム</option>
+              <option>クイズゲーム</option>
+              <option>クリック連打ゲーム</option>
+              <option>宝探しゲーム</option>
+              <option>育成ゲーム</option>
+            </select>
+          </label>
+          <label>
+            世界観
+            <select id="world">
+              <option>宇宙</option>
+              <option>森</option>
+              <option>海</option>
+              <option>学校</option>
+              <option>おばけ屋敷</option>
+              <option>未来都市</option>
+              <option>雪山</option>
+              <option>お菓子の国</option>
+            </select>
+          </label>
+          <label>
+            主人公
+            <input id="heroName" placeholder="例：宇宙ねこ、ロボット、勇者" />
+          </label>
+          <label>
+            集めるもの / 目標
+            <input id="goalItem" placeholder="例：星、コイン、宝石、正解ポイント" />
+          </label>
+          <label>
+            じゃまをするもの
+            <input id="enemy" placeholder="例：隕石、おばけ、落とし穴" />
+          </label>
+          <label>
+            操作方法
+            <select id="control">
+              <option>タップまたはクリック</option>
+              <option>画面上のボタン</option>
+              <option>キーボードの矢印キー</option>
+              <option>マウス移動</option>
+              <option>タップでジャンプ</option>
+            </select>
+          </label>
+          <label>
+            難しさ
+            <select id="difficulty">
+              <option>かんたん</option>
+              <option>ふつう</option>
+              <option>少しむずかしい</option>
+            </select>
+          </label>
+          <label>
+            見た目の雰囲気
+            <select id="tone">
+              <option>かわいい</option>
+              <option>かっこいい</option>
+              <option>レトロゲーム風</option>
+              <option>明るくカラフル</option>
+              <option>シンプルで見やすい</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="form-grid hidden" id="improve" data-section="improve">
+          <label>
+            何を改良したい？
+            <select id="improveType">
+              <option>もっと面白くしたい</option>
+              <option>難易度を上げたい</option>
+              <option>難易度を下げたい</option>
+              <option>スコア機能を追加したい</option>
+              <option>制限時間を追加したい</option>
+              <option>スマホ・iPadで遊びやすくしたい</option>
+              <option>見た目を良くしたい</option>
+            </select>
+          </label>
+          <label>
+            今のゲームで気に入っているところ
+            <input id="goodPoint" placeholder="例：キャラクター、操作、音、背景" />
+          </label>
+          <label class="wide">
+            追加したいアイデア
+            <textarea id="newIdea" rows="4" placeholder="例：時間がたつと敵が速くなるようにしたい"></textarea>
+          </label>
+        </div>
+
+        <div class="form-grid hidden" id="fix" data-section="fix">
+          <label>
+            こまっていること
+            <select id="trouble">
+              <option>画面が真っ白</option>
+              <option>ボタンが反応しない</option>
+              <option>キャラクターが動かない</option>
+              <option>iPadで操作しにくい</option>
+              <option>ゲームオーバーにならない</option>
+              <option>画像や音が表示されない</option>
+            </select>
+          </label>
+          <label class="wide">
+            くわしい状況
+            <textarea id="troubleDetail" rows="4" placeholder="例：コードを貼って実行したら、背景だけ表示されます"></textarea>
+          </label>
+        </div>
+
+        <div class="form-grid hidden" id="present" data-section="present">
+          <label>
+            ゲーム名
+            <input id="presentationTitle" placeholder="例：宇宙ねこラン" />
+          </label>
+          <label>
+            いちばん見てほしいところ
+            <input id="appealPoint" placeholder="例：敵をよけるタイミング、かわいい背景" />
+          </label>
+          <label class="wide">
+            作るときに工夫したこと
+            <textarea id="effort" rows="4" placeholder="例：iPadでも遊びやすいようにボタンを大きくしました"></textarea>
+          </label>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="btn primary" id="generate">プロンプトを作る</button>
+          <button type="reset" class="btn ghost">入力をリセット</button>
+        </div>
+      </form>
+
+      <aside class="panel output-panel">
+        <div class="panel-head">
+          <p class="label">STEP 2</p>
+          <h2>できたプロンプト</h2>
+          <p>コピーして Google AI Studio に貼り付けます。</p>
+        </div>
+        <textarea id="output" class="output" readonly placeholder="ここにプロンプトが表示されます"></textarea>
+        <div class="copy-row">
+          <button class="btn primary" id="copy">コピーする</button>
+          <span id="copyStatus" role="status"></span>
+        </div>
+        <div class="hint-box">
+          <strong>講座での使い方</strong>
+          <ol>
+            <li>まず質問に答える</li>
+            <li>プロンプトをコピー</li>
+            <li>Google AI Studio に貼る</li>
+            <li>動いたゲームを改良する</li>
+          </ol>
+        </div>
+      </aside>
+    </section>
+
+    <section class="cards-section">
+      <article class="info-card">
+        <span>1</span>
+        <h3>最初は選ぶだけ</h3>
+        <p>自由入力を少なくして、作りたいゲームを考えるところからサポートします。</p>
+      </article>
+      <article class="info-card">
+        <span>2</span>
+        <h3>改良もプロンプト化</h3>
+        <p>一度作って終わりではなく、「もっと面白くする」ためのお願い文も作れます。</p>
+      </article>
+      <article class="info-card">
+        <span>3</span>
+        <h3>困った時も相談</h3>
+        <p>画面が真っ白、iPadで動かないなど、トラブル相談用の文章も作れます。</p>
+      </article>
+    </section>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
