@@ -29,9 +29,55 @@ const modeTexts = {
   },
 };
 
+const otherSelects = [
+  { selectId: 'genre', otherId: 'genreOther' },
+  { selectId: 'world', otherId: 'worldOther' },
+  { selectId: 'control', otherId: 'controlOther' },
+  { selectId: 'difficulty', otherId: 'difficultyOther' },
+  { selectId: 'tone', otherId: 'toneOther' },
+  { selectId: 'improveType', otherId: 'improveTypeOther' },
+  { selectId: 'trouble', otherId: 'troubleOther' },
+];
+
 function value(id, fallback = '') {
   const node = document.getElementById(id);
   return node ? node.value.trim() || fallback : fallback;
+}
+
+function selectedValue(selectId, otherId, fallback = '') {
+  const select = document.getElementById(selectId);
+  if (!select) {
+    return fallback;
+  }
+
+  if (select.value === '__other__') {
+    return value(otherId, 'その他');
+  }
+
+  return select.value.trim() || fallback;
+}
+
+function syncOtherField(selectId, otherId) {
+  const select = document.getElementById(selectId);
+  const otherInput = document.getElementById(otherId);
+
+  if (!select || !otherInput) {
+    return;
+  }
+
+  const isOther = select.value === '__other__';
+  otherInput.classList.toggle('hidden', !isOther);
+  otherInput.disabled = !isOther;
+
+  if (!isOther) {
+    otherInput.value = '';
+  }
+}
+
+function syncAllOtherFields() {
+  otherSelects.forEach(({ selectId, otherId }) => {
+    syncOtherField(selectId, otherId);
+  });
 }
 
 function setMode(mode) {
@@ -61,14 +107,14 @@ function generatePrompt() {
 }
 
 function makeGamePrompt() {
-  const genre = value('genre', 'ジャンプゲーム');
-  const world = value('world', '宇宙');
+  const genre = selectedValue('genre', 'genreOther', 'ジャンプゲーム');
+  const world = selectedValue('world', 'worldOther', '宇宙');
   const heroName = value('heroName', '主人公キャラクター');
   const goalItem = value('goalItem', 'アイテム');
   const enemy = value('enemy', 'じゃまをするもの');
-  const control = value('control', 'タップまたはクリック');
-  const difficulty = value('difficulty', 'かんたん');
-  const tone = value('tone', 'かわいい');
+  const control = selectedValue('control', 'controlOther', 'タップまたはクリック');
+  const difficulty = selectedValue('difficulty', 'difficultyOther', 'かんたん');
+  const tone = selectedValue('tone', 'toneOther', 'かわいい');
 
   return `HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲームを作ってください。
 
@@ -93,7 +139,7 @@ function makeGamePrompt() {
 }
 
 function makeImprovePrompt() {
-  const improveType = value('improveType', 'もっと面白くしたい');
+  const improveType = selectedValue('improveType', 'improveTypeOther', 'もっと面白くしたい');
   const goodPoint = value('goodPoint', '今のゲームの良いところ');
   const newIdea = value('newIdea', '追加したいアイデア');
 
@@ -119,7 +165,7 @@ function makeImprovePrompt() {
 }
 
 function makeFixPrompt() {
-  const trouble = value('trouble', '画面が真っ白');
+  const trouble = selectedValue('trouble', 'troubleOther', '画面が真っ白');
   const troubleDetail = value('troubleDetail', '詳しい状況');
 
   return `HTML、CSS、JavaScriptで作ったゲームがうまく動きません。
@@ -149,6 +195,7 @@ function fillSample() {
   document.getElementById('control').value = 'タップでジャンプ';
   document.getElementById('difficulty').value = 'かんたん';
   document.getElementById('tone').value = 'かわいい';
+  syncAllOtherFields();
   setMode('make');
 }
 
@@ -176,6 +223,18 @@ function bindEvents() {
     button.addEventListener('click', () => setMode(button.dataset.mode));
   });
 
+  otherSelects.forEach(({ selectId, otherId }) => {
+    const select = document.getElementById(selectId);
+    if (!select) {
+      return;
+    }
+
+    select.addEventListener('change', () => {
+      syncOtherField(selectId, otherId);
+      generatePrompt();
+    });
+  });
+
   document.querySelectorAll('input, select, textarea').forEach((input) => {
     input.addEventListener('input', generatePrompt);
     input.addEventListener('change', generatePrompt);
@@ -187,4 +246,5 @@ function bindEvents() {
 }
 
 bindEvents();
+syncAllOtherFields();
 generatePrompt();

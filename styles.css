@@ -233,6 +233,7 @@ h1 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 14px;
+  align-items: start;
 }
 .hidden { display: none; }
 label {
@@ -241,6 +242,7 @@ label {
   color: #dfe7fb;
   font-size: 13px;
   font-weight: 800;
+  align-self: start;
 }
 label.wide { grid-column: 1 / -1; }
 input, select, textarea {
