@@ -12,13 +12,13 @@
       <a class="brand" href="#top" aria-label="トップへ戻る">
         <span class="brand-icon">✨</span>
         <span>
-          <strong>FamilyDayゲームツクール特設サイト</strong>
+          <strong id="brandTitle">FamilyDayゲームツクール特設サイト</strong>
           <small>Let's make games!</small>
         </span>
       </a>
       <nav class="top-nav" aria-label="メニュー">
-        <a href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">AIでゲームを作る</a>
-        <a href="arcade/index.html">作ったゲームであそぶ</a>
+        <a id="navMakeGame" href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">AIでゲームを作る</a>
+        <a id="navPlayGame" href="arcade/index.html">作ったゲームであそぶ</a>
       </nav>
     </div>
   </header>
@@ -26,19 +26,19 @@
   <main id="top">
     <section class="hero">
       <div class="hero-copy">
-        <p class="kicker">プロンプトメーカー</p>
-        <h1>ゲームのアイデアを、<br />AIに伝わるプロンプトへ。</h1>
-        <p class="lead">
+        <p class="kicker" id="kickerText">プロンプトメーカー</p>
+        <h1 id="heroTitle">ゲームのアイデアを、<br />AIに伝わるプロンプトへ。</h1>
+        <p class="lead" id="heroLead">
           質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。
         </p>
       </div>
       <div class="hero-card" aria-hidden="true">
-        <div class="floating-card card-a">主人公：宇宙ねこ</div>
-        <div class="floating-card card-b">操作：タップでジャンプ</div>
-        <div class="floating-card card-c">世界観：お菓子の国</div>
+        <div class="floating-card card-a" id="cardAText">主人公：宇宙ねこ</div>
+        <div class="floating-card card-b" id="cardBText">操作：タップでジャンプ</div>
+        <div class="floating-card card-c" id="cardCText">世界観：お菓子の国</div>
         <div class="prompt-preview">
           <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
-          <p>HTML、CSS、JavaScriptを使って、iPadで遊べるゲームを作ってください...</p>
+          <p id="previewPromptText">HTML、CSS、JavaScriptを使って、iPadで遊べるゲームを作ってください...</p>
         </div>
       </div>
     </section>
@@ -47,6 +47,10 @@
       <button class="mode active" data-mode="make">🎮 新しく作る</button>
       <button class="mode" data-mode="improve">🛠️ 改良する</button>
       <button class="mode" data-mode="fix">🧯 エラー相談</button>
+    </section>
+
+    <section class="reading-mode-bar" aria-label="表示モード">
+      <button type="button" class="btn ghost" id="readingModeToggle" aria-pressed="false">🌱 低学年モード: OFF</button>
     </section>
 
     <section class="workspace">
@@ -183,7 +187,7 @@
 
         <div class="form-actions">
           <button type="button" class="btn primary" id="generate">プロンプトを作る</button>
-          <button type="reset" class="btn ghost">入力をリセット</button>
+          <button type="reset" class="btn ghost" id="resetButton">入力をリセット</button>
           <button type="button" class="btn ghost" id="fillSample">お手本を入れる</button>
         </div>
       </form>
@@ -227,22 +231,6 @@
         <h3>困った時も相談</h3>
         <p>画面が真っ白、iPadで動かないなど、トラブル相談用の文章も作れます。</p>
       </article>
-    </section>
-    <section class="form-section" aria-label="アンケートフォーム">
-      <div class="form-frame">
-        <p class="form-badge">📝 さいごにアンケート！</p>
-        <h2>やってみたことを教えてね</h2>
-        <p>タップしやすいように、大きなわくの中にフォームを表示しています。</p>
-        <div class="form-embed">
-          <iframe
-            src="https://forms.gle/qHDZE21C1Tk58pfy8"
-            title="ファミリーデイ講座アンケート"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
-      </div>
     </section>
   </main>
 
