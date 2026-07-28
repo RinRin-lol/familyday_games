@@ -422,6 +422,8 @@ HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲ
 - 操作方法: ${control}
 - 難しさ: ${difficulty}
 - 見た目: ${tone}
+- ゲームタイトル: ${value('gameTitle', '')}
+- ニックネーム: ${value('nickname', '')}
 
 ## 必ず入れてほしい条件
 1. iPadのブラウザでも遊びやすいようにする。
