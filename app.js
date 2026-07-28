@@ -545,6 +545,8 @@ function fillSample() {
   document.getElementById('control').selectedIndex = 4;
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
+  document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
+  document.getElementById('nickname').value = state.lowGrade ?'ぷれいやー1':'プレイヤー1';
   syncAllOtherFields();
   setMode('make');
 }
