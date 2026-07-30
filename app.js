@@ -269,7 +269,7 @@ function applyReadingMode() {
   setElementText('#cardAText', state.lowGrade ? 'しゅじんこう：うちゅうねこ' : '主人公：宇宙ねこ');
   setElementText('#cardBText', state.lowGrade ? 'そうさ：タップで じゃんぷ' : '操作：タップでジャンプ');
   setElementText('#cardCText', state.lowGrade ? 'せかいかん：おかしのくに' : '世界観：お菓子の国');
-  setElementText('#previewPromptText', state.lowGrade ? 'HTML、CSS、JavaScriptを つかって、iPadで あそべる ゲームを つくってください...' : 'HTML、CSS、JavaScriptを使って、iPadで遊べるゲームを作ってください...');
+  setElementText('#previewPromptText', state.lowGrade ? 'iPadで あそべる げーむを つくってください...' : 'iPadで遊べるゲームを作ってください...');
 
   setElementText('[data-mode="make"]', state.lowGrade ? 'あたらしく つくる' : '新しく作る');
   setElementText('[data-mode="improve"]', state.lowGrade ? 'かいりょうする' : '改良する');
@@ -406,10 +406,8 @@ function makeGamePrompt() {
   if (state.lowGrade) {
     return `# ゲーム せいさく プロンプト
 
-HTML、CSS、JavaScriptを つかって、ブラウザで あそべる シンプルな ゲームを つくってください。
-
-## つくりたい ゲーム
-- ゲームの しゅるい: ${genre}
+## つくりたい げーむ
+- げーむの しゅるい: ${genre}
 - せかいかん: ${world}
 - しゅじんこう: ${heroName}
 - もくてき: ${goalItem}を あつめる、または もくひょうにする
@@ -430,8 +428,6 @@ HTML、CSS、JavaScriptを つかって、ブラウザで あそべる シンプ
 
   return `# ゲーム制作プロンプト
 
-HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲームを作ってください。
-
 ## 作りたいゲーム
 - ゲームの種類: ${genre}
 - 世界観: ${world}
@@ -441,6 +437,8 @@ HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲ
 - 操作方法: ${control}
 - 難しさ: ${difficulty}
 - 見た目: ${tone}
+- ゲームタイトル: ${value('gameTitle', '')}
+- ニックネーム: ${value('nickname', '')}
 
 ## 必ず入れてほしい条件
 1. iPadのブラウザでも遊びやすいようにする。
@@ -448,8 +446,7 @@ HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲ
 3. スコアを表示する。
 4. ゲームオーバー画面と「もう一度遊ぶ」ボタンを入れる。
 5. まずはシンプルに動く完成版を作る。
-6. HTML、CSS、JavaScriptを1つのHTMLファイルにまとめる。
-7. 初心者にも分かるように、重要なところには短いコメントを入れる。`;
+6. 初心者にも分かるように、重要なところには短いコメントを入れる。`;
 }
 
 function makeImprovePrompt() {
@@ -507,8 +504,7 @@ function makeFixPrompt() {
   if (state.lowGrade) {
     return `# エラー そうだん プロンプト
 
-HTML、CSS、JavaScriptで つくった ゲームが うまく うごきません。
-しょしんしゃにも わかるように げんいんを せつめいし、しゅうせいばんの コードを だしてください。
+しょしんしゃにも わかるように げんいんを せつめいし、しゅうせいばんの こーどを だしてください。
 
 ## こまっていること
 - ${trouble}
@@ -518,14 +514,15 @@ HTML、CSS、JavaScriptで つくった ゲームが うまく うごきませ�
 
 ## おねがい
 1. げんいんとして かんがえられることを、わかりやすく せつめいしてください。
-2. しゅうせいばんは 1つのHTMLファイルで うごくように してください。
-3. iPadの ブラウザでも うごくように してください。
-4. しゅうせいした ばしょが わかるように、みじかい コメントを いれてください。`;
+2. iPadの ぶらうざでも うごくように してください。
+3. しゅうせいした ばしょが わかるように、みじかい こめんとを いれてください。
+
+## ほそく
+このあと、げんざいの こーどを はります。`;
   }
 
   return `# エラー相談プロンプト
 
-HTML、CSS、JavaScriptで作ったゲームがうまく動きません。
 初心者にも分かるように原因を説明し、修正版のコードを出してください。
 
 ## こまっていること
@@ -536,9 +533,11 @@ HTML、CSS、JavaScriptで作ったゲームがうまく動きません。
 
 ## お願い
 1. 原因として考えられることを、分かりやすく説明してください。
-2. 修正版は1つのHTMLファイルで動くようにしてください。
-3. iPadのブラウザでも動くようにしてください。
-4. 修正した場所が分かるように、短いコメントを入れてください。`;
+2. iPadのブラウザでも動くようにしてください。
+3. 修正した場所が分かるように、短いコメントを入れてください。
+
+## 補足
+このあと、現在のコードを貼ります。`;
 }
 
 function fillSample() {
@@ -550,6 +549,8 @@ function fillSample() {
   document.getElementById('control').selectedIndex = 4;
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
+  document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
+  document.getElementById('nickname').value = state.lowGrade ?'ぷれいやー1':'プレイヤー1';
   syncAllOtherFields();
   setMode('make');
 }
