@@ -361,6 +361,11 @@ function setMode(mode) {
   const lang = state.lowGrade ? 'kana' : 'normal';
   el.formTitle.textContent = modeTexts[lang][mode].title;
   el.formHelp.textContent = modeTexts[lang][mode].help;
+
+  if (el.fillSample) {
+    el.fillSample.classList.toggle('hidden', mode !== 'make');
+  }
+
   generatePrompt();
 }
 
@@ -544,7 +549,7 @@ function fillSample() {
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
   syncAllOtherFields();
-  setMode('make');
+  generatePrompt();
 }
 
 async function copyPrompt() {
