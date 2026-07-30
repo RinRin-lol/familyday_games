@@ -18,10 +18,13 @@
       </a>
       <nav class="top-nav" aria-label="メニュー">
         <a id="navMakeGame" href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">AIでゲームを作る</a>
-        <a id="navPlayGame" href="https://rinrin-lol.github.io/amusement_arcade/">作ったゲームであそぶ</a>
+        <a id="navPlayGame" href="arcade/index_ar.html">作ったゲームであそぶ</a>
+        <a id="navQrCode" href="#qrSection" aria-controls="qrSection" aria-expanded="false">QRコード</a>
       </nav>
     </div>
   </header>
+
+  <div class="qr-overlay" id="qrOverlay" aria-hidden="true"></div>
 
   <main id="top">
     <section class="hero">
@@ -43,14 +46,29 @@
       </div>
     </section>
 
+    <section class="qr-section" id="qrSection" aria-label="QRコード" aria-hidden="true">
+      <div class="qr-panel">
+        <button type="button" class="qr-close" id="qrCloseButton" aria-label="閉じる">×</button>
+        <div class="qr-copy">
+          <p class="kicker" id="qrKickerText">ゲーム共有QRコード</p>
+          <h2 id="qrTitle">QRコードを表示</h2>
+          <p id="qrLead">講座で配布するQRコードです。必要なときに保存して使えます。</p>
+          <a class="btn primary" id="downloadQrButton" href="img/gamemake.png" download="gamemake.png">QRコードをダウンロード</a>
+        </div>
+        <figure class="qr-figure">
+          <img src="img/gamemake.png" alt="ゲーム作成ページのQRコード" id="qrImage" loading="lazy" />
+        </figure>
+      </div>
+    </section>
+
     <section class="mode-tabs" aria-label="モード選択">
-      <button class="mode active" data-mode="make">🎮 新しく作る</button>
-      <button class="mode" data-mode="improve">🛠️ 改良する</button>
-      <button class="mode" data-mode="fix">🧯 エラー相談</button>
+      <button class="mode active" data-mode="make">新しく作る</button>
+      <button class="mode" data-mode="improve">改良する</button>
+      <button class="mode" data-mode="fix">エラー相談</button>
     </section>
 
     <section class="reading-mode-bar" aria-label="表示モード">
-      <button type="button" class="btn ghost" id="readingModeToggle" aria-pressed="false">🌱 低学年モード: OFF</button>
+      <button type="button" class="btn ghost" id="readingModeToggle" aria-pressed="false">低学年モード: OFF</button>
     </section>
 
     <section class="workspace">
@@ -204,7 +222,6 @@
         <div class="panel-head">
           <p class="label">STEP 2</p>
           <h2>できたプロンプト</h2>
-          <p>コピーして Google AI Studio に貼り付けます。</p>
         </div>
         <textarea id="output" class="output" readonly placeholder="ここにプロンプトが表示されます"></textarea>
         <div class="copy-row">

@@ -16,7 +16,23 @@ const el = {
   resetButton: document.getElementById('resetButton'),
   readingModeToggle: document.getElementById('readingModeToggle'),
   form: document.getElementById('promptForm'),
+  navQrCode: document.getElementById('navQrCode'),
+  qrSection: document.getElementById('qrSection'),
+  qrOverlay: document.getElementById('qrOverlay'),
+  qrCloseButton: document.getElementById('qrCloseButton'),
 };
+
+function setQrPanelOpen(isOpen) {
+  if (!el.qrSection || !el.navQrCode || !el.qrOverlay) {
+    return;
+  }
+
+  el.qrSection.classList.toggle('open', isOpen);
+  el.qrOverlay.classList.toggle('open', isOpen);
+  el.qrSection.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  el.qrOverlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  el.navQrCode.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
 
 const modeTexts = {
   normal: {
@@ -35,16 +51,16 @@ const modeTexts = {
   },
   kana: {
     make: {
-      title: 'つくりたい げーむを おしえてね',
+      title: 'つくりたい ゲームを おしえてね',
       help: 'まずは えらぶだけで OK。じゆうに かくのは わかるところだけで だいじょうぶ。',
     },
     improve: {
-      title: 'いまある げーむを どう かいりょうしたい？',
+      title: 'いまある ゲームを どう かいりょうしたい？',
       help: 'ついかしたい きのうや、もっと よくしたいところを せいりしよう。',
     },
     fix: {
       title: 'こまっていることを おしえてね',
-      help: 'えらーや うごかない げんいんを AIに そうだんする ぶんしょうを つくるよ。',
+      help: 'エラーや うごかない げんいんを AIに そうだんする ぶんしょうを つくるよ。',
     },
   },
 };
@@ -60,13 +76,13 @@ const optionSets = {
     trouble: ['画面が真っ白', 'ボタンが反応しない', 'キャラクターが動かない', 'iPadで操作しにくい', 'ゲームオーバーにならない', '画像や音が表示されない', { value: '__other__', label: 'その他' }],
   },
   kana: {
-    genre: ['じゃんぷげーむ', 'よけげー', 'しゅーてぃんぐ', 'めいろげーむ', 'くいずげーむ', 'くりっくれんだげーむ', 'たからさがしげーむ', 'いくせいげーむ', { value: '__other__', label: 'そのた' }],
+    genre: ['ジャンプゲーム', 'よけゲー', 'シューティング', 'めいろゲーム', 'クイズゲーム', 'クリックれんだゲーム', 'たからさがしゲーム', 'いくせいゲーム', { value: '__other__', label: 'そのた' }],
     world: ['うちゅう', 'もり', 'うみ', 'がっこう', 'おばけやしき', 'みらいとし', 'ゆきやま', 'おかしのくに', { value: '__other__', label: 'そのた' }],
-    control: ['たっぷ または くりっく', 'がめんの ぼたん', 'きーぼーどの やじるしきー', 'まうすいどう', 'たっぷで じゃんぷ', { value: '__other__', label: 'そのた' }],
+    control: ['タップ または クリック', 'がめんの ボタン', 'キーボードの やじるしキー', 'マウスいどう', 'タップで じゃんぷ', { value: '__other__', label: 'そのた' }],
     difficulty: ['かんたん', 'ふつう', 'すこし むずかしい', { value: '__other__', label: 'そのた' }],
-    tone: ['かわいい', 'かっこいい', 'れとろげーむふう', 'あかるく からふる', 'しんぷるで みやすい', { value: '__other__', label: 'そのた' }],
-    improveType: ['もっと おもしろくしたい', 'なんいどを あげたい', 'なんいどを さげたい', 'すこあきのうを ついかしたい', 'せいげんじかんを ついかしたい', 'すまほ・iPadで あそびやすくしたい', 'みためを よくしたい', { value: '__other__', label: 'そのた' }],
-    trouble: ['がめんが まっしろ', 'ぼたんが はんのうしない', 'きゃらくたーが うごかない', 'iPadで そうさしにくい', 'げーむおーばーに ならない', 'がぞうや おとが ひょうじされない', { value: '__other__', label: 'そのた' }],
+    tone: ['かわいい', 'かっこいい', 'レトロゲームふう', 'あかるく からふる', 'シンプルで みやすい', { value: '__other__', label: 'そのた' }],
+    improveType: ['もっと おもしろくしたい', 'なんいどを あげたい', 'なんいどを さげたい', 'スコアきのうを ついかしたい', 'せいげんじかんを ついかしたい', 'スマホ・iPadで あそびやすくしたい', 'みためを よくしたい', { value: '__other__', label: 'そのた' }],
+    trouble: ['がめんが まっしろ', 'ぼたんが はんのうしない', 'キャラクターが うごかない', 'iPadで そうさしにくい', 'ゲームオーバーに ならない', 'がぞうや おとが ひょうじされない', { value: '__other__', label: 'そのた' }],
   },
 };
 
@@ -87,7 +103,7 @@ const labelTexts = {
     troubleDetail: 'くわしい状況',
   },
   kana: {
-    genre: 'げーむの しゅるい',
+    genre: 'ゲームの しゅるい',
     world: 'せかいかん',
     heroName: 'しゅじんこう',
     goalItem: 'あつめるもの / もくひょう',
@@ -96,7 +112,7 @@ const labelTexts = {
     difficulty: 'むずかしさ',
     tone: 'みための ふんいき',
     improveType: 'なにを かいりょうしたい？',
-    goodPoint: 'いまの げーむで きにいっているところ',
+    goodPoint: 'いまの ゲームで きにいっているところ',
     newIdea: 'ついかしたい あいであ',
     trouble: 'こまっていること',
     troubleDetail: 'くわしい じょうきょう',
@@ -121,7 +137,7 @@ const placeholders = {
     output: 'ここにプロンプトが表示されます',
   },
   kana: {
-    genreOther: 'そのたの げーむの しゅるいを にゅうりょく',
+    genreOther: 'そのたの ゲームの しゅるいを にゅうりょく',
     worldOther: 'そのたの せかいかんを にゅうりょく',
     heroName: 'れい：うちゅうねこ、ろぼっと、ゆうしゃ',
     goalItem: 'れい：ほし、こいん、ほうせき、せいかいぽいんと',
@@ -130,11 +146,11 @@ const placeholders = {
     difficultyOther: 'そのたの むずかしさを にゅうりょく',
     toneOther: 'そのたの みための ふんいきを にゅうりょく',
     improveTypeOther: 'そのたの かいりょうないようを にゅうりょく',
-    goodPoint: 'れい：きゃらくたー、そうさ、おと、はいけい',
+    goodPoint: 'れい：キャラクター、そうさ、おと、はいけい',
     newIdea: 'れい：じかんがたつと てきが はやくなるようにしたい',
     troubleOther: 'そのたの こまっていることを にゅうりょく',
-    troubleDetail: 'れい：こーどを はって じっこうしたら、はいけいだけ ひょうじされます',
-    output: 'ここに ぷろんぷとが ひょうじされます',
+    troubleDetail: 'れい：コードを はって じっこうしたら、はいけいだけ ひょうじされます',
+    output: 'ここに プロンプトが ひょうじされます',
   },
 };
 
@@ -239,20 +255,25 @@ function applyReadingMode() {
     el.readingModeToggle.setAttribute('aria-pressed', state.lowGrade ? 'true' : 'false');
   }
 
-  setElementText('#brandTitle', state.lowGrade ? 'FamilyDay げーむつくーる とくせつさいと' : 'FamilyDayゲームツクール特設サイト');
-  setElementText('#navMakeGame', state.lowGrade ? 'AIで げーむを つくる' : 'AIでゲームを作る');
-  setElementText('#navPlayGame', state.lowGrade ? 'つくった げーむで あそぶ' : '作ったゲームであそぶ');
-  setElementText('#kickerText', state.lowGrade ? 'ぷろんぷとめーかー' : 'プロンプトメーカー');
-  setElementText('#heroTitle', state.lowGrade ? 'げーむの あいであを、<br />AIに つたわる ぷろんぷとへ。' : 'ゲームのアイデアを、<br />AIに伝わるプロンプトへ。', true);
-  setElementText('#heroLead', state.lowGrade ? 'しつもんに こたえるだけで、げーむせいさくようの ぷろんぷとを じどうで つくれます。' : '質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。');
+  setElementText('#brandTitle', state.lowGrade ? 'FamilyDay ゲームツクール とくせつサイト' : 'FamilyDayゲームツクール特設サイト');
+  setElementText('#navMakeGame', state.lowGrade ? 'AIで ゲームを つくる' : 'AIでゲームを作る');
+  setElementText('#navPlayGame', state.lowGrade ? 'つくった ゲームで あそぶ' : '作ったゲームであそぶ');
+  setElementText('#navQrCode', state.lowGrade ? 'QRコード' : 'QRコード');
+  setElementText('#kickerText', state.lowGrade ? 'プロンプトメーカー' : 'プロンプトメーカー');
+  setElementText('#heroTitle', state.lowGrade ? 'ゲームの アイデアを、<br />AIに つたわる プロンプトへ。' : 'ゲームのアイデアを、<br />AIに伝わるプロンプトへ。', true);
+  setElementText('#heroLead', state.lowGrade ? 'しつもんに こたえるだけで、ゲームせいさくようの プロンプトを じどうで つくれます。' : '質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。');
+  setElementText('#qrKickerText', state.lowGrade ? 'ゲームきょうゆう QRコード' : 'ゲーム共有QRコード');
+  setElementText('#qrTitle', state.lowGrade ? 'QRコードを ひょうじ' : 'QRコードを表示');
+  setElementText('#qrLead', state.lowGrade ? 'こうざで くばる QRコードです。ひつような ときに ほぞんして つかえます。' : '講座で配布するQRコードです。必要なときに保存して使えます。');
+  setElementText('#downloadQrButton', state.lowGrade ? 'QRコードを ダウンロード' : 'QRコードをダウンロード');
   setElementText('#cardAText', state.lowGrade ? 'しゅじんこう：うちゅうねこ' : '主人公：宇宙ねこ');
-  setElementText('#cardBText', state.lowGrade ? 'そうさ：たっぷで じゃんぷ' : '操作：タップでジャンプ');
+  setElementText('#cardBText', state.lowGrade ? 'そうさ：タップで じゃんぷ' : '操作：タップでジャンプ');
   setElementText('#cardCText', state.lowGrade ? 'せかいかん：おかしのくに' : '世界観：お菓子の国');
   setElementText('#previewPromptText', state.lowGrade ? 'iPadで あそべる げーむを つくってください...' : 'iPadで遊べるゲームを作ってください...');
 
-  setElementText('[data-mode="make"]', state.lowGrade ? '🎮 あたらしく つくる' : '🎮 新しく作る');
-  setElementText('[data-mode="improve"]', state.lowGrade ? '🛠️ かいりょうする' : '🛠️ 改良する');
-  setElementText('[data-mode="fix"]', state.lowGrade ? '🧯 えらー そうだん' : '🧯 エラー相談');
+  setElementText('[data-mode="make"]', state.lowGrade ? 'あたらしく つくる' : '新しく作る');
+  setElementText('[data-mode="improve"]', state.lowGrade ? 'かいりょうする' : '改良する');
+  setElementText('[data-mode="fix"]', state.lowGrade ? 'エラー そうだん' : 'エラー相談');
 
   const stepLabels = document.querySelectorAll('.panel-head .label');
   if (stepLabels[0]) {
@@ -262,17 +283,15 @@ function applyReadingMode() {
     stepLabels[1].textContent = 'STEP 2';
   }
 
-  setElementText('.output-panel .panel-head h2', state.lowGrade ? 'できた ぷろんぷと' : 'できたプロンプト');
-  setElementText('.output-panel .panel-head p', state.lowGrade ? 'こぴーして Google AI Studio に はりつけます。' : 'コピーして Google AI Studio に貼り付けます。');
-  setElementText('#generate', state.lowGrade ? 'ぷろんぷとを つくる' : 'プロンプトを作る');
+  setElementText('#generate', state.lowGrade ? 'プロンプトを つくる' : 'プロンプトを作る');
   setElementText('#resetButton', state.lowGrade ? 'にゅうりょくを りせっと' : '入力をリセット');
   setElementText('#fillSample', state.lowGrade ? 'おてほんを いれる' : 'お手本を入れる');
-  setElementText('#copy', state.lowGrade ? 'こぴーする' : 'コピーする');
+  setElementText('#copy', state.lowGrade ? 'コピーする' : 'コピーする');
 
   setElementText('.hint-box strong', state.lowGrade ? 'こうざでの つかいかた' : '講座での使い方');
   const hintItems = document.querySelectorAll('.hint-box li');
   const hintTexts = state.lowGrade
-    ? ['まず しつもんに こたえる', 'ぷろんぷとを こぴー', 'Google AI Studio に はる', 'うごいた げーむを かいりょうする']
+    ? ['まず しつもんに こたえる', 'プロンプトを コピー', 'Google AI Studio に はる', 'うごいた ゲームを かいりょうする']
     : ['まず質問に答える', 'プロンプトをコピー', 'Google AI Studio に貼る', '動いたゲームを改良する'];
   hintItems.forEach((item, index) => {
     if (hintTexts[index]) {
@@ -283,11 +302,11 @@ function applyReadingMode() {
   const cardTitles = document.querySelectorAll('.info-card h3');
   const cardBodies = document.querySelectorAll('.info-card p');
   const cardTitleTexts = state.lowGrade
-    ? ['さいしょは えらぶだけ', 'かいりょうも ぷろんぷとか', 'こまったときも そうだん']
+    ? ['さいしょは えらぶだけ', 'かいりょうも プロンプトか', 'こまったときも そうだん']
     : ['最初は選ぶだけ', '改良もプロンプト化', '困った時も相談'];
   const cardBodyTexts = state.lowGrade
     ? [
-      'じゆうに かくりょうを すくなくして、つくりたい げーむを かんがえるところから さぽーとします。',
+      'じゆうに かくりょうを すくなくして、つくりたい ゲームを かんがえるところから さぽーとします。',
       'いちど つくって おわりではなく、「もっと おもしろくする」ための おねがいぶんも つくれます。',
       'がめんが まっしろ、iPadで うごかない など、とらぶるそうだんようの ぶんしょうも つくれます。',
     ]
@@ -375,17 +394,17 @@ function generatePrompt() {
 }
 
 function makeGamePrompt() {
-  const genre = selectedValue('genre', 'genreOther', state.lowGrade ? 'じゃんぷげーむ' : 'ジャンプゲーム');
+  const genre = selectedValue('genre', 'genreOther', state.lowGrade ? 'ジャンプゲーム' : 'ジャンプゲーム');
   const world = selectedValue('world', 'worldOther', state.lowGrade ? 'うちゅう' : '宇宙');
-  const heroName = value('heroName', state.lowGrade ? 'しゅじんこう きゃらくたー' : '主人公キャラクター');
-  const goalItem = value('goalItem', state.lowGrade ? 'あいてむ' : 'アイテム');
+  const heroName = value('heroName', state.lowGrade ? 'しゅじんこう キャラクター' : '主人公キャラクター');
+  const goalItem = value('goalItem', state.lowGrade ? 'アイテム' : 'アイテム');
   const enemy = value('enemy', state.lowGrade ? 'じゃまをするもの' : 'じゃまをするもの');
-  const control = selectedValue('control', 'controlOther', state.lowGrade ? 'たっぷ または くりっく' : 'タップまたはクリック');
+  const control = selectedValue('control', 'controlOther', state.lowGrade ? 'タップ または クリック' : 'タップまたはクリック');
   const difficulty = selectedValue('difficulty', 'difficultyOther', 'かんたん');
   const tone = selectedValue('tone', 'toneOther', 'かわいい');
 
   if (state.lowGrade) {
-    return `# げーむ せいさく ぷろんぷと
+    return `# ゲーム せいさく プロンプト
 
 ## つくりたい げーむ
 - げーむの しゅるい: ${genre}
@@ -398,12 +417,13 @@ function makeGamePrompt() {
 - みため: ${tone}
 
 ## かならず いれてほしい じょうけん
-1. iPadの ぶらうざでも あそびやすいようにする。
-2. そうさぼたんや もじは おおきめにする。
-3. すこあを ひょうじする。
-4. げーむおーばー がめんと「もういちど あそぶ」ぼたんを いれる。
-5. まずは しんぷるに うごく かんせいばんを つくる。
-6. しょしんしゃにも わかるように、たいせつなところへ みじかい こめんとを いれる。`;
+1. iPadの ブラウザでも あそびやすいようにする。
+2. そうさボタンや もじは おおきめにする。
+3. スコアを ひょうじする。
+4. ゲームオーバー がめんと「もういちど あそぶ」ボタンを いれる。
+5. まずは シンプルに うごく かんせいばんを つくる。
+6. HTML、CSS、JavaScriptを 1つのHTMLファイルに まとめる。
+7. しょしんしゃにも わかるように、たいせつなところへ みじかい コメントを いれる。`;
   }
 
   return `# ゲーム制作プロンプト
@@ -431,31 +451,29 @@ function makeGamePrompt() {
 
 function makeImprovePrompt() {
   const improveType = selectedValue('improveType', 'improveTypeOther', state.lowGrade ? 'もっと おもしろくしたい' : 'もっと面白くしたい');
-  const goodPoint = value('goodPoint', state.lowGrade ? 'いまの げーむの よいところ' : '今のゲームの良いところ');
-  const newIdea = value('newIdea', state.lowGrade ? 'ついかしたい あいであ' : '追加したいアイデア');
+  const goodPoint = value('goodPoint', state.lowGrade ? 'いまの ゲームの よいところ' : '今のゲームの良いところ');
+  const newIdea = value('newIdea', state.lowGrade ? 'ついかしたい アイデア' : '追加したいアイデア');
 
   if (state.lowGrade) {
-    return `# げーむ かいりょう ぷろんぷと
+    return `# ゲーム かいりょう プロンプト
 
-つぎの げーむを かいりょうしたいです。
+つぎの ゲームを かいりょうしたいです。
 
 ## かいりょうしたいこと
 - ${improveType}
 
-## いまの げーむで きにいっているところ
+## いまの ゲームで きにいっているところ
 - ${goodPoint}
 
-## ついかしたい あいであ
+## ついかしたい アイデア
 - ${newIdea}
 
 ## おねがい
-1. いまの げーむの よいところは できるだけ のこしてください。
+1. いまの ゲームの よいところは できるだけ のこしてください。
 2. iPadでも あそびやすいように してください。
 3. どこを へんこうしたのか、しょしんしゃにも わかるように せつめいしてください。
-4. きのうを ついかするばあいは、げーむが おもくなりすぎないように してください。
-
-## ほそく
-このあと、げんざいの こーどを はります。`;
+4. しゅうせいばんの コードは、HTML、CSS、JavaScriptを 1つのHTMLファイルに まとめて だしてください。
+5. きのうを ついかするばあいは、ゲームが おもくなりすぎないように してください。`;
   }
 
   return `# ゲーム改良プロンプト
@@ -475,10 +493,8 @@ function makeImprovePrompt() {
 1. 今のゲームの良いところはできるだけ残してください。
 2. iPadでも遊びやすいようにしてください。
 3. どこを変更したのか、初心者にも分かるように説明してください。
-4. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。
-
-## 補足
-このあと、現在のコードを貼ります。`;
+4. 修正版のコードは、HTML、CSS、JavaScriptを1つのHTMLファイルにまとめて出してください。
+5. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。`;
 }
 
 function makeFixPrompt() {
@@ -486,7 +502,7 @@ function makeFixPrompt() {
   const troubleDetail = value('troubleDetail', state.lowGrade ? 'くわしい じょうきょう' : '詳しい状況');
 
   if (state.lowGrade) {
-    return `# えらー そうだん ぷろんぷと
+    return `# エラー そうだん プロンプト
 
 しょしんしゃにも わかるように げんいんを せつめいし、しゅうせいばんの こーどを だしてください。
 
@@ -590,6 +606,32 @@ function bindEvents() {
       applyReadingMode();
     });
   }
+
+  if (el.navQrCode && el.qrSection) {
+    el.navQrCode.addEventListener('click', (event) => {
+      event.preventDefault();
+      const isOpen = el.qrSection.classList.contains('open');
+      setQrPanelOpen(!isOpen);
+    });
+  }
+
+  if (el.qrOverlay) {
+    el.qrOverlay.addEventListener('click', () => {
+      setQrPanelOpen(false);
+    });
+  }
+
+  if (el.qrCloseButton) {
+    el.qrCloseButton.addEventListener('click', () => {
+      setQrPanelOpen(false);
+    });
+  }
+
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape') {
+      setQrPanelOpen(false);
+    }
+  });
 
   if (el.form) {
     el.form.addEventListener('reset', () => {
