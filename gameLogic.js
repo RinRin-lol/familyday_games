@@ -7,12 +7,17 @@ document.addEventListener("DOMContentLoaded", () => {
     const controlOptions = {
       "ジャンプゲーム": ["タップでジャンプ", "キーボードの矢印キー"],
       "迷路ゲーム": ["キーボードの矢印キー", "マウス移動"],
+      "めいろゲーム": ["キーボードの矢印キー", "マウス移動"],
       "シューティング": ["キーボードの矢印キー", "画面上のボタン"],
       "クイズゲーム": ["タップまたはクリック"],
       "クリック連打ゲーム": ["タップまたはクリック"],
+      "クリックれんだゲーム": ["タップまたはクリック"],
       "宝探しゲーム": ["キーボードの矢印キー", "マウス移動"],
+      "たからさがしゲーム": ["キーボードの矢印キー", "マウス移動"],
       "育成ゲーム": ["タップまたはクリック", "画面上のボタン"],
+      "いくせいゲーム": ["タップまたはクリック", "画面上のボタン"],
       "避けゲー": ["タップでジャンプ", "キーボードの矢印キー"],
+      "よけゲー": ["タップでジャンプ", "キーボードの矢印キー"],
       "__other__": ["タップまたはクリック", "画面上のボタン", "キーボードの矢印キー", "マウス移動", "タップでジャンプ"]
     };
   
@@ -34,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // ゲームの種類に応じた目標のプレースホルダーを設定
     genreSelect.addEventListener("change", () => {
       const selectedGenre = genreSelect.value;
-      if (selectedGenre === "迷路ゲーム") {
+      if (selectedGenre === "迷路ゲーム" || selectedGenre === "めいろゲーム") {
         goalInput.placeholder = "例：ゴールにたどり着く";
       } else if (selectedGenre === "ジャンプゲーム") {
         goalInput.placeholder = "例：コインを集める";
@@ -43,5 +48,19 @@ document.addEventListener("DOMContentLoaded", () => {
       } else {
         goalInput.placeholder = "例：星、コイン、宝石、正解ポイント";
       }
+    });
+
+    const gameTitleInput = document.getElementById("gameTitle");
+    const nicknameInput = document.getElementById("nickname");
+
+    // プロンプト生成ボタンのクリックイベント
+    const generateButton = document.getElementById("generate");
+    generateButton.addEventListener("click", () => {
+        const gameTitle = gameTitleInput.value.trim();
+        const nickname = nicknameInput.value.trim();
+        if (!gameTitle || !nickname) {
+          alert("ゲームタイトルとニックネームを入力してください。");
+          return;
+        }
     });
   });
