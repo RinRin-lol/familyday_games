@@ -234,8 +234,8 @@ function applyReadingMode() {
 
   if (el.readingModeToggle) {
     el.readingModeToggle.textContent = state.lowGrade
-      ? `🌱 ていがくねん もーど: ${onOffText}`
-      : `🌱 低学年モード: ${onOffText}`;
+      ? `ていがくねん もーど: ${onOffText}`
+      : `低学年モード: ${onOffText}`;
     el.readingModeToggle.setAttribute('aria-pressed', state.lowGrade ? 'true' : 'false');
   }
 
@@ -248,7 +248,7 @@ function applyReadingMode() {
   setElementText('#cardAText', state.lowGrade ? 'しゅじんこう：うちゅうねこ' : '主人公：宇宙ねこ');
   setElementText('#cardBText', state.lowGrade ? 'そうさ：たっぷで じゃんぷ' : '操作：タップでジャンプ');
   setElementText('#cardCText', state.lowGrade ? 'せかいかん：おかしのくに' : '世界観：お菓子の国');
-  setElementText('#previewPromptText', state.lowGrade ? 'HTML、CSS、JavaScriptを つかって、iPadで あそべる げーむを つくってください...' : 'HTML、CSS、JavaScriptを使って、iPadで遊べるゲームを作ってください...');
+  setElementText('#previewPromptText', state.lowGrade ? 'iPadで あそべる げーむを つくってください...' : 'iPadで遊べるゲームを作ってください...');
 
   setElementText('[data-mode="make"]', state.lowGrade ? '🎮 あたらしく つくる' : '🎮 新しく作る');
   setElementText('[data-mode="improve"]', state.lowGrade ? '🛠️ かいりょうする' : '🛠️ 改良する');
@@ -387,8 +387,6 @@ function makeGamePrompt() {
   if (state.lowGrade) {
     return `# げーむ せいさく ぷろんぷと
 
-HTML、CSS、JavaScriptを つかって、ぶらうざで あそべる しんぷるな げーむを つくってください。
-
 ## つくりたい げーむ
 - げーむの しゅるい: ${genre}
 - せかいかん: ${world}
@@ -405,13 +403,10 @@ HTML、CSS、JavaScriptを つかって、ぶらうざで あそべる しんぷ
 3. すこあを ひょうじする。
 4. げーむおーばー がめんと「もういちど あそぶ」ぼたんを いれる。
 5. まずは しんぷるに うごく かんせいばんを つくる。
-6. HTML、CSS、JavaScriptを 1つのHTMLふぁいるに まとめる。
-7. しょしんしゃにも わかるように、たいせつなところへ みじかい こめんとを いれる。`;
+6. しょしんしゃにも わかるように、たいせつなところへ みじかい こめんとを いれる。`;
   }
 
   return `# ゲーム制作プロンプト
-
-HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲームを作ってください。
 
 ## 作りたいゲーム
 - ゲームの種類: ${genre}
@@ -429,8 +424,7 @@ HTML、CSS、JavaScriptを使って、ブラウザで遊べるシンプルなゲ
 3. スコアを表示する。
 4. ゲームオーバー画面と「もう一度遊ぶ」ボタンを入れる。
 5. まずはシンプルに動く完成版を作る。
-6. HTML、CSS、JavaScriptを1つのHTMLファイルにまとめる。
-7. 初心者にも分かるように、重要なところには短いコメントを入れる。`;
+6. 初心者にも分かるように、重要なところには短いコメントを入れる。`;
 }
 
 function makeImprovePrompt() {
@@ -456,8 +450,7 @@ function makeImprovePrompt() {
 1. いまの げーむの よいところは できるだけ のこしてください。
 2. iPadでも あそびやすいように してください。
 3. どこを へんこうしたのか、しょしんしゃにも わかるように せつめいしてください。
-4. しゅうせいばんの こーどは、HTML、CSS、JavaScriptを 1つのHTMLふぁいるに まとめて だしてください。
-5. きのうを ついかするばあいは、げーむが おもくなりすぎないように してください。
+4. きのうを ついかするばあいは、げーむが おもくなりすぎないように してください。
 
 ## ほそく
 このあと、げんざいの こーどを はります。`;
@@ -480,8 +473,7 @@ function makeImprovePrompt() {
 1. 今のゲームの良いところはできるだけ残してください。
 2. iPadでも遊びやすいようにしてください。
 3. どこを変更したのか、初心者にも分かるように説明してください。
-4. 修正版のコードは、HTML、CSS、JavaScriptを1つのHTMLファイルにまとめて出してください。
-5. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。
+4. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。
 
 ## 補足
 このあと、現在のコードを貼ります。`;
@@ -494,7 +486,6 @@ function makeFixPrompt() {
   if (state.lowGrade) {
     return `# えらー そうだん ぷろんぷと
 
-HTML、CSS、JavaScriptで つくった げーむが うまく うごきません。
 しょしんしゃにも わかるように げんいんを せつめいし、しゅうせいばんの こーどを だしてください。
 
 ## こまっていること
@@ -505,9 +496,8 @@ HTML、CSS、JavaScriptで つくった げーむが うまく うごきませ�
 
 ## おねがい
 1. げんいんとして かんがえられることを、わかりやすく せつめいしてください。
-2. しゅうせいばんは 1つのHTMLふぁいるで うごくように してください。
-3. iPadの ぶらうざでも うごくように してください。
-4. しゅうせいした ばしょが わかるように、みじかい こめんとを いれてください。
+2. iPadの ぶらうざでも うごくように してください。
+3. しゅうせいした ばしょが わかるように、みじかい こめんとを いれてください。
 
 ## ほそく
 このあと、げんざいの こーどを はります。`;
@@ -515,7 +505,6 @@ HTML、CSS、JavaScriptで つくった げーむが うまく うごきませ�
 
   return `# エラー相談プロンプト
 
-HTML、CSS、JavaScriptで作ったゲームがうまく動きません。
 初心者にも分かるように原因を説明し、修正版のコードを出してください。
 
 ## こまっていること
@@ -526,9 +515,8 @@ HTML、CSS、JavaScriptで作ったゲームがうまく動きません。
 
 ## お願い
 1. 原因として考えられることを、分かりやすく説明してください。
-2. 修正版は1つのHTMLファイルで動くようにしてください。
-3. iPadのブラウザでも動くようにしてください。
-4. 修正した場所が分かるように、短いコメントを入れてください。
+2. iPadのブラウザでも動くようにしてください。
+3. 修正した場所が分かるように、短いコメントを入れてください。
 
 ## 補足
 このあと、現在のコードを貼ります。`;
