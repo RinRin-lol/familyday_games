@@ -51,16 +51,4 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     const gameTitleInput = document.getElementById("gameTitle");
-    const nicknameInput = document.getElementById("nickname");
-
-    // プロンプト生成ボタンのクリックイベント
-    const generateButton = document.getElementById("generate");
-    generateButton.addEventListener("click", () => {
-        const gameTitle = gameTitleInput.value.trim();
-        const nickname = nicknameInput.value.trim();
-        if (!gameTitle || !nickname) {
-          alert("ゲームタイトルとニックネームを入力してください。");
-          return;
-        }
-    });
   });

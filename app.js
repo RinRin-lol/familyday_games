@@ -443,7 +443,6 @@ function makeGamePrompt() {
 - 難しさ: ${difficulty}
 - 見た目: ${tone}
 - ゲームタイトル: ${value('gameTitle', '')}
-- ニックネーム: ${value('nickname', '')}
 
 ## 必ず入れてほしい条件
 1. iPadのブラウザでも遊びやすいようにする。
@@ -555,7 +554,6 @@ function fillSample() {
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
   document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
-  document.getElementById('nickname').value = state.lowGrade ?'ぷれいやー1':'プレイヤー1';
   syncAllOtherFields();
   generatePrompt();
 }
