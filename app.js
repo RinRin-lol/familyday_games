@@ -283,8 +283,6 @@ function applyReadingMode() {
     stepLabels[1].textContent = 'STEP 2';
   }
 
-  setElementText('.output-panel .panel-head h2', state.lowGrade ? 'できた プロンプト' : 'できたプロンプト');
-  setElementText('.output-panel .panel-head p', state.lowGrade ? 'コピーして Google AI Studio に はりつけます。' : 'コピーして Google AI Studio に貼り付けます。');
   setElementText('#generate', state.lowGrade ? 'プロンプトを つくる' : 'プロンプトを作る');
   setElementText('#resetButton', state.lowGrade ? 'にゅうりょくを りせっと' : '入力をリセット');
   setElementText('#fillSample', state.lowGrade ? 'おてほんを いれる' : 'お手本を入れる');
