@@ -56,4 +56,12 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("readingModeToggle").addEventListener("click", () => {
         updateControlOptions(); // 低学年モード切り替え時に操作方法を更新
     });
+
+    document.getElementById("fillSample").addEventListener("click", () => {
+        updateControlOptions();
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+        updateControlOptions();
+    });
 });

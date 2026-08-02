@@ -291,8 +291,8 @@ function applyReadingMode() {
   setElementText('.hint-box strong', state.lowGrade ? 'こうざでの つかいかた' : '講座での使い方');
   const hintItems = document.querySelectorAll('.hint-box li');
   const hintTexts = state.lowGrade
-    ? ['まず しつもんに こたえる', 'プロンプトを コピー', 'Google AI Studio に はる', 'うごいた ゲームを かいりょうする']
-    : ['まず質問に答える', 'プロンプトをコピー', 'Google AI Studio に貼る', '動いたゲームを改良する'];
+    ? ['まず しつもんに こたえる', 'プロンプトをつくるボタンをおす','プロンプトを コピー', 'Google AI Studio に はる', 'うごいた ゲームを かいりょうする']
+    : ['まず質問に答える', 'プロンプトを作るボタンを押す','プロンプトをコピー', 'Google AI Studio に貼る', '動いたゲームを改良する'];
   hintItems.forEach((item, index) => {
     if (hintTexts[index]) {
       item.textContent = hintTexts[index];
@@ -385,25 +385,80 @@ function setMode(mode) {
     el.fillSample.classList.toggle('hidden', mode !== 'make');
   }
 
-  generatePrompt();
+  el.output.value = '';
 }
 
 function generatePrompt() {
-  const generators = {
-    make: makeGamePrompt,
-    improve: makeImprovePrompt,
-    fix: makeFixPrompt,
-  };
+  // ステータスを「作成中...」に設定
+  el.output.value = "作成中...";
+  el.output.classList.add("loading");
 
-  el.output.value = generators[state.mode]();
+  // 少し遅延を入れてプロンプトを生成（疑似的な処理時間を表現）
+  setTimeout(() => {
+    const generators = {
+      make: makeGamePrompt,
+      improve: makeImprovePrompt,
+      fix: makeFixPrompt,
+    };
+
+    // プロンプトを生成
+    el.output.value = generators[state.mode]();
+    el.output.classList.remove("loading"); // ステータスを解除
+  }, 1000); // 1秒の遅延を追加
 }
+
+function fillSample() {
+  document.getElementById('genre').selectedIndex = 0;
+  document.getElementById('world').selectedIndex = 0;
+  document.getElementById('heroName').value = state.lowGrade ? 'うちゅうねこ' : '宇宙ねこ';
+  document.getElementById('goalItem').value = state.lowGrade ? 'ほし' : '星';
+  document.getElementById('enemy').value = state.lowGrade ? 'いんせき' : '隕石';
+  document.getElementById('control').selectedIndex = 0; // 操作方法を設定;
+  document.getElementById('difficulty').selectedIndex = 0;
+  document.getElementById('tone').selectedIndex = 0;
+  document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
+  syncAllOtherFields();
+}
+
+function resetButton() {
+  document.getElementById('genre').selectedIndex = 0;
+  document.getElementById('world').selectedIndex = 0;
+  document.getElementById('heroName').value = '';
+  document.getElementById('goalItem').value = '';
+  document.getElementById('enemy').value = '';
+  document.getElementById('control').selectedIndex = 0; // 操作方法を設定;
+  document.getElementById('difficulty').selectedIndex = 0;
+  document.getElementById('tone').selectedIndex = 0;
+  document.getElementById('gameTitle').value = '';
+
+  document.getElementById('output').value = '';
+}
+
+async function copyPrompt() {
+
+
+  try {
+    await navigator.clipboard.writeText(el.output.value);
+    el.copyStatus.textContent = 'コピーしました！';
+  } catch {
+    el.output.select();
+    document.execCommand('copy');
+    el.copyStatus.textContent = 'コピーしました！';
+  }
+
+  setTimeout(() => {
+    el.copyStatus.textContent = '';
+  }, 1800);
+}
+
+
 
 function makeGamePrompt() {
   const genre = selectedValue('genre', 'genreOther', state.lowGrade ? 'ジャンプゲーム' : 'ジャンプゲーム');
   const world = selectedValue('world', 'worldOther', state.lowGrade ? 'うちゅう' : '宇宙');
-  const heroName = value('heroName', state.lowGrade ? 'しゅじんこう キャラクター' : '主人公キャラクター');
-  const goalItem = value('goalItem', state.lowGrade ? 'アイテム' : 'アイテム');
-  const enemy = value('enemy', state.lowGrade ? 'じゃまをするもの' : 'じゃまをするもの');
+  const heroName = value('heroName');
+  const goalItem = value('goalItem');
+  const enemy = value('enemy');
   const control = selectedValue('control', 'controlOther', state.lowGrade ? 'タップ または クリック' : 'タップまたはクリック');
   const difficulty = selectedValue('difficulty', 'difficultyOther', 'かんたん');
   const tone = selectedValue('tone', 'toneOther', 'かわいい');
@@ -420,6 +475,7 @@ function makeGamePrompt() {
 - そうさほうほう: ${control}
 - むずかしさ: ${difficulty}
 - みため: ${tone}
+- ゲームタイトル: ${value('gameTitle', '')}
 
 ## かならず いれてほしい じょうけん
 1. iPadの ブラウザでも あそびやすいようにする。
@@ -520,9 +576,7 @@ function makeFixPrompt() {
 1. げんいんとして かんがえられることを、わかりやすく せつめいしてください。
 2. iPadの ぶらうざでも うごくように してください。
 3. しゅうせいした ばしょが わかるように、みじかい こめんとを いれてください。
-
-## ほそく
-このあと、げんざいの こーどを はります。`;
+`;
   }
 
   return `# エラー相談プロンプト
@@ -539,42 +593,7 @@ function makeFixPrompt() {
 1. 原因として考えられることを、分かりやすく説明してください。
 2. iPadのブラウザでも動くようにしてください。
 3. 修正した場所が分かるように、短いコメントを入れてください。
-
-## 補足
-このあと、現在のコードを貼ります。`;
-}
-
-function fillSample() {
-  document.getElementById('genre').selectedIndex = 0;
-  document.getElementById('world').selectedIndex = 0;
-  document.getElementById('heroName').value = state.lowGrade ? 'うちゅうねこ' : '宇宙ねこ';
-  document.getElementById('goalItem').value = state.lowGrade ? 'ほし' : '星';
-  document.getElementById('enemy').value = state.lowGrade ? 'いんせき' : '隕石';
-  document.getElementById('control').selectedIndex = 4;
-  document.getElementById('difficulty').selectedIndex = 0;
-  document.getElementById('tone').selectedIndex = 0;
-  document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
-  syncAllOtherFields();
-  generatePrompt();
-}
-
-async function copyPrompt() {
-  if (!el.output.value.trim()) {
-    generatePrompt();
-  }
-
-  try {
-    await navigator.clipboard.writeText(el.output.value);
-    el.copyStatus.textContent = 'コピーしました！';
-  } catch {
-    el.output.select();
-    document.execCommand('copy');
-    el.copyStatus.textContent = 'コピーしました！';
-  }
-
-  setTimeout(() => {
-    el.copyStatus.textContent = '';
-  }, 1800);
+`;
 }
 
 function bindEvents() {
@@ -590,18 +609,13 @@ function bindEvents() {
 
     select.addEventListener('change', () => {
       syncOtherField(selectId, otherId);
-      generatePrompt();
     });
-  });
-
-  document.querySelectorAll('input, select, textarea').forEach((input) => {
-    input.addEventListener('input', generatePrompt);
-    input.addEventListener('change', generatePrompt);
   });
 
   el.generate.addEventListener('click', generatePrompt);
   el.copy.addEventListener('click', copyPrompt);
   el.fillSample.addEventListener('click', fillSample);
+  el.resetButton.addEventListener('click', resetButton);
 
   if (el.readingModeToggle) {
     el.readingModeToggle.addEventListener('click', () => {
@@ -635,15 +649,6 @@ function bindEvents() {
       setQrPanelOpen(false);
     }
   });
-
-  if (el.form) {
-    el.form.addEventListener('reset', () => {
-      setTimeout(() => {
-        syncAllOtherFields();
-        generatePrompt();
-      }, 0);
-    });
-  }
 }
 
 bindEvents();
