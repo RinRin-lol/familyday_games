@@ -96,6 +96,7 @@ const labelTexts = {
     control: '操作方法',
     difficulty: '難しさ',
     tone: '見た目の雰囲気',
+    nickname: 'あなたのニックネーム',
     improveType: '何を改良したい？',
     goodPoint: '今のゲームで気に入っているところ',
     newIdea: '追加したいアイデア',
@@ -111,6 +112,7 @@ const labelTexts = {
     control: 'そうさ ほうほう',
     difficulty: 'むずかしさ',
     tone: 'みための ふんいき',
+    nickname: 'あなたの ニックネーム',
     improveType: 'なにを かいりょうしたい？',
     goodPoint: 'いまの ゲームで きにいっているところ',
     newIdea: 'ついかしたい あいであ',
@@ -129,6 +131,7 @@ const placeholders = {
     controlOther: 'その他の操作方法を入力',
     difficultyOther: 'その他の難しさを入力',
     toneOther: 'その他の見た目の雰囲気を入力',
+    nickname: '例：たろたろ、ねこマスター',
     improveTypeOther: 'その他の改良内容を入力',
     goodPoint: '例：キャラクター、操作、音、背景',
     newIdea: '例：時間がたつと敵が速くなるようにしたい',
@@ -145,6 +148,7 @@ const placeholders = {
     controlOther: 'そのたの そうさほうほうを にゅうりょく',
     difficultyOther: 'そのたの むずかしさを にゅうりょく',
     toneOther: 'そのたの みための ふんいきを にゅうりょく',
+    nickname: 'れい：たろたろ、ねこますたー',
     improveTypeOther: 'そのたの かいりょうないようを にゅうりょく',
     goodPoint: 'れい：キャラクター、そうさ、おと、はいけい',
     newIdea: 'れい：じかんがたつと てきが はやくなるようにしたい',
@@ -417,6 +421,7 @@ function fillSample() {
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
   document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
+  document.getElementById('nickname').value = state.lowGrade ? 'たろたろ' : 'たろたろ';
   syncAllOtherFields();
 }
 
@@ -430,6 +435,7 @@ function resetButton() {
   document.getElementById('difficulty').selectedIndex = 0;
   document.getElementById('tone').selectedIndex = 0;
   document.getElementById('gameTitle').value = '';
+  document.getElementById('nickname').value = '';
 
   document.getElementById('output').value = '';
 }
@@ -462,51 +468,97 @@ function makeGamePrompt() {
   const control = selectedValue('control', 'controlOther', state.lowGrade ? 'タップ または クリック' : 'タップまたはクリック');
   const difficulty = selectedValue('difficulty', 'difficultyOther', 'かんたん');
   const tone = selectedValue('tone', 'toneOther', 'かわいい');
+  const gameTitle = value('gameTitle');
+  const nickname = value('nickname');
 
   if (state.lowGrade) {
+    const gameLines = [
+      `- げーむの しゅるい: ${genre}`,
+      `- せかいかん: ${world}`,
+      `- そうさほうほう: ${control}`,
+      `- むずかしさ: ${difficulty}`,
+      `- みため: ${tone}`,
+    ];
+
+    if (heroName) {
+      gameLines.push(`- しゅじんこう: ${heroName}`);
+    }
+    if (goalItem) {
+      gameLines.push(`- もくてき: ${goalItem}を あつめる、または もくひょうにする`);
+    }
+    if (enemy) {
+      gameLines.push(`- じゃまをするもの: ${enemy}`);
+    }
+    if (gameTitle) {
+      gameLines.push(`- ゲームタイトル: ${gameTitle}`);
+    }
+
+    const conditions = [
+      'iPadの ブラウザでも あそびやすいようにする。',
+      'そうさボタンや もじは おおきめにする。',
+      'スコアを ひょうじする。',
+      'ゲームオーバー がめんと「もういちど あそぶ」ボタンを いれる。',
+      'まずは シンプルに うごく かんせいばんを つくる。',
+      'HTML、CSS、JavaScriptを 1つのHTMLファイルに まとめる。',
+    ];
+
+    if (nickname) {
+      conditions.push(`ゲームの なかに さくしゃめいとして「${nickname}」という ニックネームを ひょうじしてください。`);
+    }
+
+    const conditionLines = conditions.map((text, index) => `${index + 1}. ${text}`).join('\n');
+
     return `# ゲーム せいさく プロンプト
 
 ## つくりたい げーむ
-- げーむの しゅるい: ${genre}
-- せかいかん: ${world}
-- しゅじんこう: ${heroName}
-- もくてき: ${goalItem}を あつめる、または もくひょうにする
-- じゃまをするもの: ${enemy}
-- そうさほうほう: ${control}
-- むずかしさ: ${difficulty}
-- みため: ${tone}
-- ゲームタイトル: ${value('gameTitle', '')}
+${gameLines.join('\n')}
 
 ## かならず いれてほしい じょうけん
-1. iPadの ブラウザでも あそびやすいようにする。
-2. そうさボタンや もじは おおきめにする。
-3. スコアを ひょうじする。
-4. ゲームオーバー がめんと「もういちど あそぶ」ボタンを いれる。
-5. まずは シンプルに うごく かんせいばんを つくる。
-6. HTML、CSS、JavaScriptを 1つのHTMLファイルに まとめる。
-7. しょしんしゃにも わかるように、たいせつなところへ みじかい コメントを いれる。`;
+${conditionLines}`;
   }
+
+  const gameLines = [
+    `- ゲームの種類: ${genre}`,
+    `- 世界観: ${world}`,
+    `- 操作方法: ${control}`,
+    `- 難しさ: ${difficulty}`,
+    `- 見た目: ${tone}`,
+  ];
+
+  if (heroName) {
+    gameLines.push(`- 主人公: ${heroName}`);
+  }
+  if (goalItem) {
+    gameLines.push(`- 目的: ${goalItem}を集める、または目標にする`);
+  }
+  if (enemy) {
+    gameLines.push(`- じゃまをするもの: ${enemy}`);
+  }
+  if (gameTitle) {
+    gameLines.push(`- ゲームタイトル: ${gameTitle}`);
+  }
+
+  const conditions = [
+    'iPadのブラウザでも遊びやすいようにする。',
+    '操作ボタンや文字は大きめにする。',
+    'スコアを表示する。',
+    'ゲームオーバー画面と「もう一度遊ぶ」ボタンを入れる。',
+    'まずはシンプルに動く完成版を作る。',
+  ];
+
+  if (nickname) {
+    conditions.push(`ゲームの中に作者名として「${nickname}」というニックネームを表示してください。`);
+  }
+
+  const conditionLines = conditions.map((text, index) => `${index + 1}. ${text}`).join('\n');
 
   return `# ゲーム制作プロンプト
 
 ## 作りたいゲーム
-- ゲームの種類: ${genre}
-- 世界観: ${world}
-- 主人公: ${heroName}
-- 目的: ${goalItem}を集める、または目標にする
-- じゃまをするもの: ${enemy}
-- 操作方法: ${control}
-- 難しさ: ${difficulty}
-- 見た目: ${tone}
-- ゲームタイトル: ${value('gameTitle', '')}
+${gameLines.join('\n')}
 
 ## 必ず入れてほしい条件
-1. iPadのブラウザでも遊びやすいようにする。
-2. 操作ボタンや文字は大きめにする。
-3. スコアを表示する。
-4. ゲームオーバー画面と「もう一度遊ぶ」ボタンを入れる。
-5. まずはシンプルに動く完成版を作る。
-6. 初心者にも分かるように、重要なところには短いコメントを入れる。`;
+${conditionLines}`;
 }
 
 function makeImprovePrompt() {
@@ -532,8 +584,7 @@ function makeImprovePrompt() {
 1. いまの ゲームの よいところは できるだけ のこしてください。
 2. iPadでも あそびやすいように してください。
 3. どこを へんこうしたのか、しょしんしゃにも わかるように せつめいしてください。
-4. しゅうせいばんの コードは、HTML、CSS、JavaScriptを 1つのHTMLファイルに まとめて だしてください。
-5. きのうを ついかするばあいは、ゲームが おもくなりすぎないように してください。`;
+4. きのうを ついかするばあいは、ゲームが おもくなりすぎないように してください。`;
   }
 
   return `# ゲーム改良プロンプト
@@ -553,8 +604,7 @@ function makeImprovePrompt() {
 1. 今のゲームの良いところはできるだけ残してください。
 2. iPadでも遊びやすいようにしてください。
 3. どこを変更したのか、初心者にも分かるように説明してください。
-4. 修正版のコードは、HTML、CSS、JavaScriptを1つのHTMLファイルにまとめて出してください。
-5. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。`;
+4. 機能を追加する場合は、ゲームが重くなりすぎないようにしてください。`;
 }
 
 function makeFixPrompt() {
@@ -575,7 +625,6 @@ function makeFixPrompt() {
 ## おねがい
 1. げんいんとして かんがえられることを、わかりやすく せつめいしてください。
 2. iPadの ぶらうざでも うごくように してください。
-3. しゅうせいした ばしょが わかるように、みじかい こめんとを いれてください。
 `;
   }
 
@@ -592,7 +641,6 @@ function makeFixPrompt() {
 ## お願い
 1. 原因として考えられることを、分かりやすく説明してください。
 2. iPadのブラウザでも動くようにしてください。
-3. 修正した場所が分かるように、短いコメントを入れてください。
 `;
 }
 
