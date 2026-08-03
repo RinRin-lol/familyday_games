@@ -341,6 +341,62 @@ h1 {
   gap: 14px;
   align-items: start;
 }
+
+#make.form-grid {
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.input-panel-block {
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 18px;
+  padding: 14px;
+  background: rgba(255,255,255,.04);
+}
+
+.input-panel-title {
+  margin: 0 0 10px;
+  font-size: 14px;
+  letter-spacing: .04em;
+  color: #c7f7ea;
+}
+
+.panel-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.choice-panel-block .panel-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.free-input-panel .panel-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.select-field {
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 14px;
+  padding: 10px;
+  background: rgba(6, 10, 24, .44);
+}
+
+.select-field .choice-options {
+  min-height: 86px;
+  align-content: flex-start;
+}
+
+.other-slot {
+  min-height: 52px;
+  display: flex;
+  align-items: flex-start;
+}
+
+.other-slot input {
+  margin-top: 8px;
+}
 .hidden { display: none; }
 label {
   display: grid;
@@ -365,6 +421,61 @@ textarea { resize: vertical; }
 input:focus, select:focus, textarea:focus {
   border-color: rgba(124, 247, 212, .75);
   box-shadow: 0 0 0 4px rgba(124, 247, 212, .12);
+}
+
+.choice-native-select {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.choice-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice-chip {
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.08);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 10px 14px;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: .01em;
+  cursor: pointer;
+  transition: transform .16s ease, border-color .16s ease, background .16s ease, box-shadow .16s ease;
+}
+
+.choice-chip:hover {
+  transform: translateY(-1px);
+  border-color: rgba(124, 247, 212, .46);
+  background: rgba(124, 247, 212, .14);
+}
+
+.choice-chip.active {
+  color: #07101f;
+  border-color: transparent;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  box-shadow: 0 10px 26px rgba(124, 247, 212, .24);
+}
+
+.choice-chip:focus-visible {
+  outline: 2px solid rgba(124, 247, 212, .9);
+  outline-offset: 2px;
+}
+
+body.kana-mode .choice-chip {
+  letter-spacing: .03em;
 }
 .form-actions { margin-top: 18px; }
 .output {
@@ -426,6 +537,7 @@ input:focus, select:focus, textarea:focus {
   .qr-section { width: 100vw; padding: 12px; }
   .qr-panel { padding: 18px; }
   .form-grid { grid-template-columns: 1fr; }
+  .panel-grid { grid-template-columns: 1fr; }
   h1 { font-size: 38px; }
   .hero { padding-top: 34px; }
   .mode-tabs { grid-template-columns: 1fr; }

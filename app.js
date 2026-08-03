@@ -246,6 +246,97 @@ function renderSelectOptions(lang) {
   });
 }
 
+function getChoiceHost(select) {
+  const label = select.closest('label');
+  if (!label || !select.id) {
+    return null;
+  }
+
+  let host = label.querySelector(`.choice-options[data-for="${select.id}"]`);
+  if (host) {
+    return host;
+  }
+
+  host = document.createElement('div');
+  host.className = 'choice-options';
+  host.dataset.for = select.id;
+  label.insertBefore(host, select.nextSibling);
+  return host;
+}
+
+function syncChoiceSelection(select) {
+  const host = getChoiceHost(select);
+  if (!host) {
+    return;
+  }
+
+  const chips = host.querySelectorAll('.choice-chip');
+  chips.forEach((chip) => {
+    const isActive = chip.dataset.value === select.value;
+    chip.classList.toggle('active', isActive);
+    chip.setAttribute('aria-pressed', isActive ? 'true' : 'false');
+  });
+}
+
+function renderChoiceOptionsForSelect(select) {
+  if (!select) {
+    return;
+  }
+
+  select.classList.add('choice-native-select');
+  const host = getChoiceHost(select);
+  if (!host) {
+    return;
+  }
+
+  host.innerHTML = '';
+  Array.from(select.options).forEach((option) => {
+    const chip = document.createElement('button');
+    chip.type = 'button';
+    chip.className = 'choice-chip';
+    chip.dataset.value = option.value;
+    chip.textContent = option.textContent;
+
+    chip.addEventListener('click', () => {
+      select.value = option.value;
+      select.dispatchEvent(new Event('change', { bubbles: true }));
+      syncChoiceSelection(select);
+    });
+
+    host.appendChild(chip);
+  });
+
+  syncChoiceSelection(select);
+}
+
+function refreshSelectChoiceUi() {
+  const scope = el.form || document;
+  const selects = scope.querySelectorAll('select');
+  selects.forEach((select) => {
+    renderChoiceOptionsForSelect(select);
+  });
+}
+
+window.refreshSelectChoiceUi = refreshSelectChoiceUi;
+
+function observeSelectOptionChanges() {
+  const scope = el.form || document;
+  const selects = scope.querySelectorAll('select');
+
+  selects.forEach((select) => {
+    if (select.dataset.choiceObserved === 'true') {
+      return;
+    }
+
+    const observer = new MutationObserver(() => {
+      renderChoiceOptionsForSelect(select);
+    });
+
+    observer.observe(select, { childList: true });
+    select.dataset.choiceObserved = 'true';
+  });
+}
+
 function applyReadingMode() {
   const lang = state.lowGrade ? 'kana' : 'normal';
   const onOffText = state.lowGrade ? 'ON' : 'OFF';
@@ -291,6 +382,8 @@ function applyReadingMode() {
   setElementText('#resetButton', state.lowGrade ? 'にゅうりょくを りせっと' : '入力をリセット');
   setElementText('#fillSample', state.lowGrade ? 'おてほんを いれる' : 'お手本を入れる');
   setElementText('#copy', state.lowGrade ? 'コピーする' : 'コピーする');
+  setElementText('#selectionPanelTitle', state.lowGrade ? 'えらんで きめる こうもく' : '選択して決める項目');
+  setElementText('#freeInputPanelTitle', state.lowGrade ? 'じゆうに かく こうもく' : '自由入力の項目');
 
   setElementText('.hint-box strong', state.lowGrade ? 'こうざでの つかいかた' : '講座での使い方');
   const hintItems = document.querySelectorAll('.hint-box li');
@@ -344,6 +437,7 @@ function applyReadingMode() {
 
   renderSelectOptions(lang);
   syncAllOtherFields();
+  refreshSelectChoiceUi();
   setMode(state.mode);
 }
 
@@ -423,6 +517,7 @@ function fillSample() {
   document.getElementById('gameTitle').value = state.lowGrade ?'うちゅうねこのだいぼうけん':'宇宙ねこの大冒険';
   document.getElementById('nickname').value = state.lowGrade ? 'たろたろ' : 'たろたろ';
   syncAllOtherFields();
+  refreshSelectChoiceUi();
 }
 
 function resetButton() {
@@ -437,6 +532,8 @@ function resetButton() {
   document.getElementById('gameTitle').value = '';
   document.getElementById('nickname').value = '';
 
+  syncAllOtherFields();
+  refreshSelectChoiceUi();
   document.getElementById('output').value = '';
 }
 
@@ -659,6 +756,22 @@ function bindEvents() {
       syncOtherField(selectId, otherId);
     });
   });
+
+  const formSelects = (el.form || document).querySelectorAll('select');
+  formSelects.forEach((select) => {
+    if (select.dataset.choiceBound === 'true') {
+      return;
+    }
+
+    select.addEventListener('change', () => {
+      syncChoiceSelection(select);
+    });
+
+    select.dataset.choiceBound = 'true';
+  });
+
+  observeSelectOptionChanges();
+  refreshSelectChoiceUi();
 
   el.generate.addEventListener('click', generatePrompt);
   el.copy.addEventListener('click', copyPrompt);

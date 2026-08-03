@@ -79,90 +79,101 @@
         </div>
 
         <div class="form-grid" id="make" data-section="make">
-          <label>
-            ゲームの種類
-            <select id="genre">
-              <option>ジャンプゲーム</option>
-              <option>避けゲー</option>
-              <option>シューティング</option>
-              <option>迷路ゲーム</option>
-              <option>クイズゲーム</option>
-              <option>クリック連打ゲーム</option>
-              <option>宝探しゲーム</option>
-              <option>育成ゲーム</option>
-              <option value="__other__">その他</option>
-            </select>
-            <input id="genreOther" class="hidden" placeholder="その他のゲームの種類を入力" />
-          </label>
-          <label>
-            世界観
-            <select id="world">
-              <option>宇宙</option>
-              <option>森</option>
-              <option>海</option>
-              <option>学校</option>
-              <option>おばけ屋敷</option>
-              <option>未来都市</option>
-              <option>雪山</option>
-              <option>お菓子の国</option>
-              <option value="__other__">その他</option>
-            </select>
-            <input id="worldOther" class="hidden" placeholder="その他の世界観を入力" />
-          </label>
-          <label>
-            主人公
-            <input id="heroName" placeholder="例：宇宙ねこ、ロボット、勇者" />
-          </label>
-          <label>
-            集めるもの / 目標
-            <input id="goalItem" placeholder="例：星、コイン、宝石、正解ポイント" />
-          </label>
-          <label>
-            じゃまをするもの
-            <input id="enemy" placeholder="例：隕石、おばけ、落とし穴" />
-          </label>
-          <label>
-            操作方法
-            <select id="control">
-              <option>タップまたはクリック</option>
-              <option>画面上のボタン</option>
-              <option>キーボードの矢印キー</option>
-              <option>マウス移動</option>
-              <option>タップでジャンプ</option>
-              <option value="__other__">その他</option>
-            </select>
-            <input id="controlOther" class="hidden" placeholder="その他の操作方法を入力" />
-          </label>
-          <label>
-            難しさ
-            <select id="difficulty">
-              <option>かんたん</option>
-              <option>ふつう</option>
-              <option>少しむずかしい</option>
-              <option value="__other__">その他</option>
-            </select>
-            <input id="difficultyOther" class="hidden" placeholder="その他の難しさを入力" />
-          </label>
-          <label>
-            見た目の雰囲気
-            <select id="tone">
-              <option>かわいい</option>
-              <option>かっこいい</option>
-              <option>レトロゲーム風</option>
-              <option>明るくカラフル</option>
-              <option>シンプルで見やすい</option>
-              <option value="__other__">その他</option>
-            </select>
-            <input id="toneOther" class="hidden" placeholder="その他の見た目の雰囲気を入力" />
-          </label>
-          <label>
-            ゲームタイトル
-            <input id="gameTitle" placeholder="例：うちゅうねこのだいぼうけん" />
-          </label>
-          <label>
-            あなたのニックネーム
-            <input id="nickname" placeholder="例：りんたろう、ねこマスター" />
-          </label>
+          <section class="input-panel-block choice-panel-block" aria-label="選択パネル">
+            <h3 class="input-panel-title" id="selectionPanelTitle">選択して決める項目</h3>
+            <div class="panel-grid">
+              <label class="select-field">
+                ゲームの種類
+                <select id="genre">
+                  <option>ジャンプゲーム</option>
+                  <option>避けゲー</option>
+                  <option>シューティング</option>
+                  <option>迷路ゲーム</option>
+                  <option>クイズゲーム</option>
+                  <option>クリック連打ゲーム</option>
+                  <option>宝探しゲーム</option>
+                  <option>育成ゲーム</option>
+                  <option value="__other__">その他</option>
+                </select>
+                <div class="other-slot"><input id="genreOther" class="hidden" placeholder="その他のゲームの種類を入力" /></div>
+              </label>
+              <label class="select-field">
+                世界観
+                <select id="world">
+                  <option>宇宙</option>
+                  <option>森</option>
+                  <option>海</option>
+                  <option>学校</option>
+                  <option>おばけ屋敷</option>
+                  <option>未来都市</option>
+                  <option>雪山</option>
+                  <option>お菓子の国</option>
+                  <option value="__other__">その他</option>
+                </select>
+                <div class="other-slot"><input id="worldOther" class="hidden" placeholder="その他の世界観を入力" /></div>
+              </label>
+              <label class="select-field">
+                操作方法
+                <select id="control">
+                  <option>タップまたはクリック</option>
+                  <option>画面上のボタン</option>
+                  <option>キーボードの矢印キー</option>
+                  <option>マウス移動</option>
+                  <option>タップでジャンプ</option>
+                  <option value="__other__">その他</option>
+                </select>
+                <div class="other-slot"><input id="controlOther" class="hidden" placeholder="その他の操作方法を入力" /></div>
+              </label>
+              <label class="select-field">
+                難しさ
+                <select id="difficulty">
+                  <option>かんたん</option>
+                  <option>ふつう</option>
+                  <option>少しむずかしい</option>
+                  <option value="__other__">その他</option>
+                </select>
+                <div class="other-slot"><input id="difficultyOther" class="hidden" placeholder="その他の難しさを入力" /></div>
+              </label>
+              <label class="select-field wide">
+                見た目の雰囲気
+                <select id="tone">
+                  <option>かわいい</option>
+                  <option>かっこいい</option>
+                  <option>レトロゲーム風</option>
+                  <option>明るくカラフル</option>
+                  <option>シンプルで見やすい</option>
+                  <option value="__other__">その他</option>
+                </select>
+                <div class="other-slot"><input id="toneOther" class="hidden" placeholder="その他の見た目の雰囲気を入力" /></div>
+              </label>
+            </div>
+          </section>
+
+          <section class="input-panel-block free-input-panel" aria-label="自由入力パネル">
+            <h3 class="input-panel-title" id="freeInputPanelTitle">自由入力の項目</h3>
+            <div class="panel-grid">
+              <label>
+                主人公
+                <input id="heroName" placeholder="例：宇宙ねこ、ロボット、勇者" />
+              </label>
+              <label>
+                集めるもの / 目標
+                <input id="goalItem" placeholder="例：星、コイン、宝石、正解ポイント" />
+              </label>
+              <label>
+                じゃまをするもの
+                <input id="enemy" placeholder="例：隕石、おばけ、落とし穴" />
+              </label>
+              <label>
+                ゲームタイトル
+                <input id="gameTitle" placeholder="例：うちゅうねこのだいぼうけん" />
+              </label>
+              <label class="wide">
+                あなたのニックネーム
+                <input id="nickname" placeholder="例：りんたろう、ねこマスター" />
+              </label>
+            </div>
+          </section>
         </div>
 
         <div class="form-grid hidden" id="improve" data-section="improve">
