@@ -27,6 +27,20 @@ function setPanelOpen(panel, trigger, isOpen) {
     return;
   }
 
+  if (!isOpen && panel.contains(document.activeElement)) {
+    if (typeof trigger.focus === 'function') {
+      trigger.focus();
+    } else if (document.activeElement && typeof document.activeElement.blur === 'function') {
+      document.activeElement.blur();
+    }
+  }
+
+  if (isOpen) {
+    panel.removeAttribute('inert');
+  } else {
+    panel.setAttribute('inert', '');
+  }
+
   panel.classList.toggle('open', isOpen);
   panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
   trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
@@ -50,6 +64,9 @@ function closeSidePanels() {
 
 function openManualPanel() {
   setPanelOpen(el.manualSection, el.navManual, true);
+  if (el.manualCloseButton && typeof el.manualCloseButton.focus === 'function') {
+    el.manualCloseButton.focus();
+  }
   syncOverlayState();
 }
 

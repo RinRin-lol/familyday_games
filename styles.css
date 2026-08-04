@@ -197,6 +197,8 @@ h1 {
   padding: 14px 12px;
   cursor: pointer;
   font-weight: 850;
+  font-size: 18px;
+  line-height: 1.25;
 }
 .mode.active {
   color: #07101f;
@@ -528,11 +530,72 @@ body.kana-mode .choice-chip {
 .hint-box strong { color: var(--text); }
 .hint-box ol { margin: 10px 0 0; padding-left: 22px; line-height: 1.8; }
 
+@media (max-width: 1180px) and (min-width: 861px) {
+  .header-inner {
+    padding: 12px 18px;
+    gap: 12px;
+  }
+  .brand {
+    gap: 10px;
+  }
+  .brand-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+  }
+  .brand strong {
+    font-size: 16px;
+  }
+  .brand small {
+    font-size: 11px;
+  }
+  .top-nav {
+    gap: 6px;
+  }
+  .top-nav a {
+    padding: 7px 10px;
+    font-size: 13px;
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 860px) {
-  .top-nav { display: none; }
+  .header-inner {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    padding: 11px 14px;
+    gap: 10px;
+  }
+  .brand {
+    gap: 9px;
+  }
+  .brand-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 12px;
+  }
+  .brand strong {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+  .brand small {
+    font-size: 11px;
+  }
+  .top-nav {
+    display: flex;
+    width: 100%;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .top-nav a {
+    padding: 6px 9px;
+    font-size: 12px;
+    white-space: nowrap;
+  }
   .hero, .workspace { grid-template-columns: 1fr; }
   .hero-card { min-height: 270px; }
   .mode-tabs { grid-template-columns: repeat(2, 1fr); }
+  .mode { font-size: 17px; }
   .reading-mode-bar { justify-content: stretch; }
   #readingModeToggle { width: 100%; }
 }
@@ -545,6 +608,7 @@ body.kana-mode .choice-chip {
   h1 { font-size: 38px; }
   .hero { padding-top: 34px; }
   .mode-tabs { grid-template-columns: 1fr; }
+  .mode { font-size: 16px; }
   .panel { padding: 18px; }
   .manual-copy h2 { font-size: 24px; }
 }
