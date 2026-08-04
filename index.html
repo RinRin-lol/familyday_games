@@ -18,7 +18,7 @@
       </a>
       <nav class="top-nav" aria-label="メニュー">
         <a id="navMakeGame" href="https://aistudio.google.com/" target="_blank" rel="noopener noreferrer">AIでゲームを作る</a>
-        <a id="navQrCode" href="#qrSection" aria-controls="qrSection" aria-expanded="false">QRコード</a>
+        <a id="navManual" href="#manualSection" aria-controls="manualSection" aria-expanded="false">操作手順書</a>
       </nav>
     </div>
   </header>
@@ -45,18 +45,65 @@
       </div>
     </section>
 
-    <section class="qr-section" id="qrSection" aria-label="QRコード" aria-hidden="true">
-      <div class="qr-panel">
-        <button type="button" class="qr-close" id="qrCloseButton" aria-label="閉じる">×</button>
-        <div class="qr-copy">
-          <p class="kicker" id="qrKickerText">ゲーム共有QRコード</p>
-          <h2 id="qrTitle">QRコードを表示</h2>
-          <p id="qrLead">講座で配布するQRコードです。必要なときに保存して使えます。</p>
-          <a class="btn primary" id="downloadQrButton" href="img/gamemake.png" download="gamemake.png">QRコードをダウンロード</a>
+    <section class="manual-section" id="manualSection" aria-label="操作手順書" aria-hidden="true">
+      <div class="manual-panel">
+        <button type="button" class="manual-close" id="manualCloseButton" aria-label="閉じる">×</button>
+        <div class="manual-copy">
+          <p class="kicker" id="manualKickerText">ゲームメイク手順ガイド</p>
+          <h2 id="manualTitle">操作手順書</h2>
+          <p id="manualLead">迷ったときには、この操作手順書を見て進めてください。</p>
         </div>
-        <figure class="qr-figure">
-          <img src="img/gamemake.png" alt="ゲーム作成ページのQRコード" id="qrImage" loading="lazy" />
-        </figure>
+
+        <div class="manual-steps">
+          <article class="manual-step">
+            <h3 id="manualAllTitle">ページの全体</h3>
+            <p id="manualAllBody">こちらが、今回使うプロンプトメーカーの最初の画面です。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_all.png" alt="all画面の全体説明" loading="lazy" />
+            </figure>
+          </article>
+
+          <article class="manual-step">
+            <h3 id="manualMake1Title">選択肢を決める</h3>
+            <p id="manualMake1Body">この画面で、ゲームの種類や世界観などの選択肢を順番に選びます。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_make1.png" alt="make1で選択肢を選ぶ画面" loading="lazy" />
+            </figure>
+          </article>
+
+          <article class="manual-step">
+            <h3 id="manualMake2Title">作成結果を確認</h3>
+            <p id="manualMake2Body">この画面では「プロンプトを作る」を押した後に、作成された文章がどのように表示されるかを確認します。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_make2.png" alt="make2で作成結果を確認する画面" loading="lazy" />
+            </figure>
+          </article>
+
+          <article class="manual-step">
+            <h3 id="manualFixTitle">ゲームを直したいとき</h3>
+            <p id="manualFixBody">ゲームを改善したいとき、挙動を直したいときはこの画面を使って依頼文を作ります。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_fix.png" alt="fixの使い方画面" loading="lazy" />
+            </figure>
+          </article>
+
+          <article class="manual-step">
+            <h3 id="manualErrorTitle">エラーが出たとき</h3>
+            <p id="manualErrorBody">画面が真っ白などのエラーが出たときはこの画面を使って、状況を詳しく伝えます。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_error.png" alt="errorの使い方画面" loading="lazy" />
+            </figure>
+          </article>
+
+          <article class="manual-step">
+            <h3 id="manualAiJumpTitle">Google AI Studio へ移動</h3>
+            <p id="manualAiJumpBody">プロンプトをコピーしたら「ここを押してね」のボタンから Google AI Studio に移動します。</p>
+            <figure class="manual-figure">
+              <img src="img/gamemaker_ai_jump.png" alt="ai_jumpでGoogle AI Studioへ移動する画面" loading="lazy" />
+            </figure>
+          </article>
+        </div>
+
       </div>
     </section>
 
@@ -250,23 +297,6 @@
       </aside>
     </section>
 
-    <section class="cards-section">
-      <article class="info-card">
-        <span>1</span>
-        <h3>最初は選ぶだけ</h3>
-        <p>自由入力を少なくして、作りたいゲームを考えるところからサポートします。</p>
-      </article>
-      <article class="info-card">
-        <span>2</span>
-        <h3>改良もプロンプト化</h3>
-        <p>一度作って終わりではなく、「もっと面白くする」ためのお願い文も作れます。</p>
-      </article>
-      <article class="info-card">
-        <span>3</span>
-        <h3>困った時も相談</h3>
-        <p>画面が真っ白、iPadで動かないなど、トラブル相談用の文章も作れます。</p>
-      </article>
-    </section>
   </main>
 
   <script src="app.js"></script>
