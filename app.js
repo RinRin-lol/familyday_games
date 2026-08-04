@@ -86,7 +86,7 @@ const modeTexts = {
 
 const optionSets = {
   normal: {
-    genre: ['ジャンプゲーム', '避けゲー', 'シューティング', '迷路ゲーム', 'クイズゲーム', 'クリック連打ゲーム', '宝探しゲーム', '育成ゲーム', { value: '__other__', label: 'その他' }],
+    genre: ['ジャンプゲーム', 'シューティング', '迷路ゲーム', 'クイズゲーム', '宝探しゲーム', 'レースゲーム', { value: '__other__', label: 'その他' }],
     world: ['宇宙', '森', '海', '学校', 'おばけ屋敷', '未来都市', '雪山', 'お菓子の国', { value: '__other__', label: 'その他' }],
     control: ['タップまたはクリック', '画面上のボタン', 'キーボードの矢印キー', 'マウス移動', 'タップでジャンプ', { value: '__other__', label: 'その他' }],
     difficulty: ['かんたん', 'ふつう', '少しむずかしい', { value: '__other__', label: 'その他' }],
@@ -95,7 +95,7 @@ const optionSets = {
     trouble: ['画面が真っ白', 'ボタンが反応しない', 'キャラクターが動かない', 'iPadで操作しにくい', 'ゲームオーバーにならない', '画像や音が表示されない', { value: '__other__', label: 'その他' }],
   },
   kana: {
-    genre: ['ジャンプゲーム', 'よけゲー', 'シューティング', 'めいろゲーム', 'クイズゲーム', 'クリックれんだゲーム', 'たからさがしゲーム', 'いくせいゲーム', { value: '__other__', label: 'そのた' }],
+    genre: ['ジャンプゲーム', 'シューティング', 'めいろゲーム', 'クイズゲーム', 'たからさがしゲーム', 'レースゲーム', { value: '__other__', label: 'そのた' }],
     world: ['うちゅう', 'もり', 'うみ', 'がっこう', 'おばけやしき', 'みらいとし', 'ゆきやま', 'おかしのくに', { value: '__other__', label: 'そのた' }],
     control: ['タップ または クリック', 'がめんの ボタン', 'キーボードの やじるしキー', 'マウスいどう', 'タップで じゃんぷ', { value: '__other__', label: 'そのた' }],
     difficulty: ['かんたん', 'ふつう', 'すこし むずかしい', { value: '__other__', label: 'そのた' }],
@@ -402,8 +402,8 @@ function applyReadingMode() {
   setElementText('.hint-box strong', state.lowGrade ? 'こうざでの つかいかた' : '講座での使い方');
   const hintItems = document.querySelectorAll('.hint-box li');
   const hintTexts = state.lowGrade
-    ? ['まず しつもんに こたえる', 'プロンプトをつくるボタンをおす','プロンプトを コピー', 'Google AI Studio に はる', 'うごいた ゲームを かいりょうする']
-    : ['まず質問に答える', 'プロンプトを作るボタンを押す','プロンプトをコピー', 'Google AI Studio に貼る', '動いたゲームを改良する'];
+    ? ['まず しつもんに こたえる', 'プロンプトを コピー', 'Google AI Studio に はる', 'うごいた ゲームを かいりょうする']
+    : ['まず質問に答える', 'プロンプトをコピー', 'Google AI Studio に貼る', '動いたゲームを改良する'];
   hintItems.forEach((item, index) => {
     if (hintTexts[index]) {
       item.textContent = hintTexts[index];
