@@ -16,22 +16,41 @@ const el = {
   resetButton: document.getElementById('resetButton'),
   readingModeToggle: document.getElementById('readingModeToggle'),
   form: document.getElementById('promptForm'),
-  navQrCode: document.getElementById('navQrCode'),
-  qrSection: document.getElementById('qrSection'),
+  navManual: document.getElementById('navManual'),
+  manualSection: document.getElementById('manualSection'),
   qrOverlay: document.getElementById('qrOverlay'),
-  qrCloseButton: document.getElementById('qrCloseButton'),
+  manualCloseButton: document.getElementById('manualCloseButton'),
 };
 
-function setQrPanelOpen(isOpen) {
-  if (!el.qrSection || !el.navQrCode || !el.qrOverlay) {
+function setPanelOpen(panel, trigger, isOpen) {
+  if (!panel || !trigger) {
     return;
   }
 
-  el.qrSection.classList.toggle('open', isOpen);
-  el.qrOverlay.classList.toggle('open', isOpen);
-  el.qrSection.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-  el.qrOverlay.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
-  el.navQrCode.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  panel.classList.toggle('open', isOpen);
+  panel.setAttribute('aria-hidden', isOpen ? 'false' : 'true');
+  trigger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+}
+
+function syncOverlayState() {
+  if (!el.qrOverlay) {
+    return;
+  }
+
+  const hasOpenPanel = Boolean(el.manualSection && el.manualSection.classList.contains('open'));
+
+  el.qrOverlay.classList.toggle('open', hasOpenPanel);
+  el.qrOverlay.setAttribute('aria-hidden', hasOpenPanel ? 'false' : 'true');
+}
+
+function closeSidePanels() {
+  setPanelOpen(el.manualSection, el.navManual, false);
+  syncOverlayState();
+}
+
+function openManualPanel() {
+  setPanelOpen(el.manualSection, el.navManual, true);
+  syncOverlayState();
 }
 
 const modeTexts = {
@@ -261,15 +280,10 @@ function applyReadingMode() {
 
   setElementText('#brandTitle', state.lowGrade ? 'FamilyDay ゲームツクール とくせつサイト' : 'FamilyDayゲームツクール特設サイト');
   setElementText('#navMakeGame', state.lowGrade ? 'AIで ゲームを つくる' : 'AIでゲームを作る');
-  setElementText('#navPlayGame', state.lowGrade ? 'つくった ゲームで あそぶ' : '作ったゲームであそぶ');
-  setElementText('#navQrCode', state.lowGrade ? 'QRコード' : 'QRコード');
+  setElementText('#navManual', state.lowGrade ? 'そうさ てじゅんしょ' : '操作手順書');
   setElementText('#kickerText', state.lowGrade ? 'プロンプトメーカー' : 'プロンプトメーカー');
   setElementText('#heroTitle', state.lowGrade ? 'ゲームの アイデアを、<br />AIに つたわる プロンプトへ。' : 'ゲームのアイデアを、<br />AIに伝わるプロンプトへ。', true);
   setElementText('#heroLead', state.lowGrade ? 'しつもんに こたえるだけで、ゲームせいさくようの プロンプトを じどうで つくれます。' : '質問に答えるだけで、ゲーム制作用のプロンプトを自動で作れます。');
-  setElementText('#qrKickerText', state.lowGrade ? 'ゲームきょうゆう QRコード' : 'ゲーム共有QRコード');
-  setElementText('#qrTitle', state.lowGrade ? 'QRコードを ひょうじ' : 'QRコードを表示');
-  setElementText('#qrLead', state.lowGrade ? 'こうざで くばる QRコードです。ひつような ときに ほぞんして つかえます。' : '講座で配布するQRコードです。必要なときに保存して使えます。');
-  setElementText('#downloadQrButton', state.lowGrade ? 'QRコードを ダウンロード' : 'QRコードをダウンロード');
   setElementText('#cardAText', state.lowGrade ? 'しゅじんこう：うちゅうねこ' : '主人公：宇宙ねこ');
   setElementText('#cardBText', state.lowGrade ? 'そうさ：タップで じゃんぷ' : '操作：タップでジャンプ');
   setElementText('#cardCText', state.lowGrade ? 'せかいかん：おかしのくに' : '世界観：お菓子の国');
@@ -303,33 +317,35 @@ function applyReadingMode() {
     }
   });
 
-  const cardTitles = document.querySelectorAll('.info-card h3');
-  const cardBodies = document.querySelectorAll('.info-card p');
-  const cardTitleTexts = state.lowGrade
-    ? ['さいしょは えらぶだけ', 'かいりょうも プロンプトか', 'こまったときも そうだん']
-    : ['最初は選ぶだけ', '改良もプロンプト化', '困った時も相談'];
-  const cardBodyTexts = state.lowGrade
-    ? [
-      'じゆうに かくりょうを すくなくして、つくりたい ゲームを かんがえるところから さぽーとします。',
-      'いちど つくって おわりではなく、「もっと おもしろくする」ための おねがいぶんも つくれます。',
-      'がめんが まっしろ、iPadで うごかない など、とらぶるそうだんようの ぶんしょうも つくれます。',
-    ]
-    : [
-      '自由入力を少なくして、作りたいゲームを考えるところからサポートします。',
-      '一度作って終わりではなく、「もっと面白くする」ためのお願い文も作れます。',
-      '画面が真っ白、iPadで動かないなど、トラブル相談用の文章も作れます。',
-    ];
-
-  cardTitles.forEach((title, index) => {
-    if (cardTitleTexts[index]) {
-      title.textContent = cardTitleTexts[index];
-    }
-  });
-  cardBodies.forEach((body, index) => {
-    if (cardBodyTexts[index]) {
-      body.textContent = cardBodyTexts[index];
-    }
-  });
+  setElementText('#manualKickerText', state.lowGrade ? 'ゲームメイク てじゅん ガイド' : 'ゲームメイク手順ガイド');
+  setElementText('#manualTitle', state.lowGrade ? 'そうさ てじゅんしょ' : '操作手順書');
+  setElementText('#manualLead', state.lowGrade
+    ? 'まよったときには、このそうさてじゅんしょをみて すすめてね。'
+    : '迷ったときには、この操作手順書を見て進めてください。');
+  setElementText('#manualAllTitle', state.lowGrade ? 'ページのぜんたい' : 'ページの全体');
+  setElementText('#manualAllBody', state.lowGrade
+    ? 'こちらが、こんかいつかうプロンプトメーカーのさいしょのがめんです。'
+    : 'こちらが、今回使うプロンプトメーカーの最初の画面です。');
+  setElementText('#manualMake1Title', state.lowGrade ? 'せんたくしを きめる' : '選択肢を決める');
+  setElementText('#manualMake1Body', state.lowGrade
+    ? 'このがめんで、ゲームの しゅるいや せかいかんなどの せんたくしを じゅんばんに えらびます。'
+    : 'この画面で、ゲームの種類や世界観などの選択肢を順番に選びます。');
+  setElementText('#manualMake2Title', state.lowGrade ? 'さくせいけっかを かくにん' : '作成結果を確認');
+  setElementText('#manualMake2Body', state.lowGrade
+    ? 'このがめんでは「プロンプトを つくる」を おしたあとに、できた ぶんしょうの ひょうじを かくにんします。'
+    : 'この画面では「プロンプトを作る」を押した後に、作成された文章がどのように表示されるかを確認します。');
+  setElementText('#manualFixTitle', state.lowGrade ? 'ゲームを なおしたい とき' : 'ゲームを直したいとき');
+  setElementText('#manualFixBody', state.lowGrade
+    ? 'ゲームを かいぜんしたい とき、うごきの しゅうせいを したい ときは このがめん を つかって いらいぶんを つくります。'
+    : 'ゲームを改善したいとき、挙動を直したいときは この画面を使って依頼文を作ります。');
+  setElementText('#manualErrorTitle', state.lowGrade ? 'エラーが でたとき' : 'エラーが出たとき');
+  setElementText('#manualErrorBody', state.lowGrade
+    ? 'がめんが まっしろ などの エラーが でたときは このがめん を つかって、じょうきょうを くわしく つたえます。'
+    : '画面が真っ白などのエラーが出たときはこの画面を使って、状況を詳しく伝えます。');
+  setElementText('#manualAiJumpTitle', state.lowGrade ? 'Google AI Studio へ いどう' : 'Google AI Studio へ移動');
+  setElementText('#manualAiJumpBody', state.lowGrade
+    ? 'プロンプトを コピーしたら うえの「AIでゲームをつくる」ボタンから Google AI Studio へ いどうします。'
+    : 'プロンプトをコピーしたら「AIでゲームを作る」のボタンから Google AI Studio に移動します。');
 
   Object.entries(labelTexts[lang]).forEach(([controlId, labelText]) => {
     setFieldLabel(controlId, labelText);
@@ -672,29 +688,35 @@ function bindEvents() {
     });
   }
 
-  if (el.navQrCode && el.qrSection) {
-    el.navQrCode.addEventListener('click', (event) => {
+  if (el.navManual && el.manualSection) {
+    el.navManual.addEventListener('click', (event) => {
       event.preventDefault();
-      const isOpen = el.qrSection.classList.contains('open');
-      setQrPanelOpen(!isOpen);
+      const isOpen = el.manualSection.classList.contains('open');
+
+      if (isOpen) {
+        closeSidePanels();
+        return;
+      }
+
+      openManualPanel();
     });
   }
 
   if (el.qrOverlay) {
     el.qrOverlay.addEventListener('click', () => {
-      setQrPanelOpen(false);
+      closeSidePanels();
     });
   }
 
-  if (el.qrCloseButton) {
-    el.qrCloseButton.addEventListener('click', () => {
-      setQrPanelOpen(false);
+  if (el.manualCloseButton) {
+    el.manualCloseButton.addEventListener('click', () => {
+      closeSidePanels();
     });
   }
 
   document.addEventListener('keydown', (event) => {
     if (event.key === 'Escape') {
-      setQrPanelOpen(false);
+      closeSidePanels();
     }
   });
 }
