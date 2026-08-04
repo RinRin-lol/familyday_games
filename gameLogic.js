@@ -42,6 +42,10 @@ document.addEventListener("DOMContentLoaded", () => {
             option.value = control;
             controlSelect.appendChild(option);
         });
+
+        if (typeof window.refreshSelectChoiceUi === "function") {
+            window.refreshSelectChoiceUi();
+        }
     }
 
     // ゲームの種類が変更されたときの処理
